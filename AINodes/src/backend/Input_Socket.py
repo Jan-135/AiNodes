@@ -1,5 +1,5 @@
-from AINodes.src.backend.Node import Node
-from AINodes.src.backend.Socket import Socket
+from AINodes.src.backend.node import Node
+from AINodes.src.backend.socket import Socket
 
 
 class InputSocket(Socket):

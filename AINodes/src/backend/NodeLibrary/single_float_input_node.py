@@ -1,4 +1,4 @@
-from AINodes.src.backend.Output_Socket import OutputSocket
+from AINodes.src.backend.output_socket import OutputSocket
 from AINodes.src.backend.input_node import InputNode
 
 

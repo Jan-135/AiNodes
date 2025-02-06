@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from AINodes.src.backend.Node import Node
+from AINodes.src.backend.node import Node
 
 
 class OutputNode(Node, ABC):

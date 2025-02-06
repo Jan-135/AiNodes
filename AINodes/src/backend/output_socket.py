@@ -1,4 +1,4 @@
-from AINodes.src.backend.Socket import Socket
+from AINodes.src.backend.socket import Socket
 
 
 class OutputSocket(Socket):

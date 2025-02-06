@@ -2,9 +2,9 @@ import os
 import sys
 
 
-from AINodes.src.backend.NodeEditor import NodeEditor
-from AINodes.src.backend.NodeLibrary.SingleFloat_Input_Node import SingleFloatInputNode
-from AINodes.src.backend.NodeLibrary.Print_Output_Node import PrintOutputNode
+from AINodes.src.backend.node_editor import NodeEditor
+from AINodes.src.backend.NodeLibrary.single_float_input_node import SingleFloatInputNode
+from AINodes.src.backend.NodeLibrary.print_output_node import PrintOutputNode
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))  # Fügt das aktuelle Verzeichnis hinzu
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "src")))  # Fügt den src-Ordner hinzu
