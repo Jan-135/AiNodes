@@ -1,14 +1,41 @@
 import os
 import sys
 
+
+from AINodes.src.backend.NodeEditor import NodeEditor
+from AINodes.src.backend.NodeLibrary.SingleFloat_Input_Node import SingleFloatInputNode
+from AINodes.src.backend.NodeLibrary.Print_Output_Node import PrintOutputNode
+
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))  # Fügt das aktuelle Verzeichnis hinzu
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "src")))  # Fügt den src-Ordner hinzu
 
-from src.ui.main_window import MainWindow
-from PySide6.QtWidgets import QApplication
+
+def main():
+    editor = NodeEditor()
+
+    # Create nodes
+    input_node = SingleFloatInputNode("input_1", value=42.0)
+    output_node = PrintOutputNode("output_1")
+
+    # Add nodes to editor
+    editor.add_node(output_node)
+    editor.add_node(input_node)
+
+
+    # Connect sockets directly
+    input_node.outputs[0].connect(output_node.inputs[0])
+
+    # Execute all nodes
+    editor.execute_all()
+
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    sys.exit(app.exec())
+    # Grafischer Code
+    # app = QApplication(sys.argv)
+    # window = MainWindow()
+    # window.show()
+    # sys.exit(app.exec())
+
+    # BackEnd Code
+    # Erstellt eine Instanz des NodeEditors
+    main()

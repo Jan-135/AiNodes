@@ -2,9 +2,9 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QMouseEvent, QBrush, QColor, QPen
 from PySide6.QtWidgets import QGraphicsScene, QGraphicsLineItem
 
-from ..core.connection import Connection
-from ..core.connection_point import ConnectionPoint
-from ..core.node import Node
+from AINodes.src.core.connection import Connection
+from AINodes.src.core.connection_point import ConnectionPoint
+from AINodes.src.core.node import Node
 
 
 class NodeEditor(QGraphicsScene):
@@ -15,6 +15,7 @@ class NodeEditor(QGraphicsScene):
         self.connections = []
         self.pending_connection = None  # Speichert die erste gewählte ConnectionPoint
         self.temp_line = None  # Temporäre Verbindungslinie
+        self.setBackgroundBrush(QBrush(QColor(100, 100, 100)))
 
     def add_node(self, x, y):
         node = Node(x, y)

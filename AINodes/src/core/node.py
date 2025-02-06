@@ -2,7 +2,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QBrush, QColor, QPen, QPainterPath, QFont
 from PySide6.QtWidgets import QGraphicsPathItem, QGraphicsTextItem, QGraphicsItemGroup, QGraphicsSceneMouseEvent
 
-from ..core.connection_point import ConnectionPoint
+from AINodes.src.core.connection_point import ConnectionPoint
 
 
 class Node(QGraphicsItemGroup):
