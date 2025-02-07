@@ -8,6 +8,8 @@ class InputNode(Node, ABC):
         super().__init__(node_id)
         self.outputs = []
 
+
+
     @abstractmethod
 
     def execute(self):
