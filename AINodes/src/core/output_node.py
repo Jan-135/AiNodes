@@ -9,8 +9,6 @@ class OutputNode(Node, ABC):
         self.inputs = []
 
     @abstractmethod
-    def add_input(self, socket):
-        pass
 
     def execute(self):
         pass

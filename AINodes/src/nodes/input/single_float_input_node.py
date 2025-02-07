@@ -6,7 +6,7 @@ class SingleFloatInputNode(InputNode):
     def __init__(self, node_id, value=0.0):
         super().__init__(node_id)
         self.value = value
-        self.outputs.append(OutputSocket(self, "Float"))
+        self.outputs.append(OutputSocket(self, "float"))
 
     def add_output(self, socket):
         pass  # Already defined in constructor
