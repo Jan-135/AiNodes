@@ -31,16 +31,20 @@ class LinearRegressionNode(BasicNode):
             print("Fehlende Eingabedaten in LinearRegressionNode")
             return None
 
-        # Konvertiere Eingaben zu NumPy-Arrays
         X_train = np.array(X_train).reshape(-1, 1)
         y_train = np.array(y_train)
         X_test = np.array(X_test).reshape(-1, 1)
 
-        # Modell trainieren
         self.model.fit(X_train, y_train)
         predictions = self.model.predict(X_test)
 
+        print(f"Training Data X: {X_train.flatten()}")
+        print(f"Training Data y: {y_train}")
+        print(f"Test Data X: {X_test.flatten()}")
+        print(f"Predictions: {predictions}")
+
         return {
             "model": self.model,
-            "predictions": predictions.tolist()  # Als Liste für bessere JSON-Kompatibilität
+            "predictions": predictions.tolist()
         }
+

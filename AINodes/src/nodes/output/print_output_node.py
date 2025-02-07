@@ -11,8 +11,13 @@ class PrintOutputNode(OutputNode):
         pass  # Already defined in constructor
 
     def execute(self):
-
+        """Gibt den Wert des Inputs aus, falls eine Verbindung besteht."""
         if self.check_if_connected():
-            print(f"Output Node {self.node_id} received: {self.inputs[0].pass_data()}")
+            data = self.inputs[0].pass_data()
+            if isinstance(data, list):
+                formatted_data = ", ".join(f"{value:.2f}" for value in data)  # Rundet auf 2 Dezimalstellen
+                print(f"Output Node {self.node_id} received: [{formatted_data}]")
+            else:
+                print(f"Output Node {self.node_id} received: {data}")
         else:
-            print(f"This node is missing at least one input: {self.node_id} ")
+            print(f"This Node has no connected Input: {self.node_id}")
