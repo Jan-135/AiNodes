@@ -1,10 +1,8 @@
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QMouseEvent, QBrush, QColor, QPen
-from PySide6.QtWidgets import QGraphicsScene, QGraphicsLineItem
+from PySide6.QtGui import QMouseEvent, QBrush, QColor
+from PySide6.QtWidgets import QGraphicsScene
 
-from AINodes.src.core.connection import Connection
-from AINodes.src.core.connection_point import ConnectionPoint
-from AINodes.src.core.node import Node
+from AINodes.src.ui.connection_point import ConnectionPoint
+from AINodes.src.ui.node import Node
 
 
 class NodeEditor(QGraphicsScene):

@@ -1,4 +1,4 @@
-from AINodes.src.backend.output_node import OutputNode
+from AINodes.src.core.output_node import OutputNode
 
 
 class NodeEditor:

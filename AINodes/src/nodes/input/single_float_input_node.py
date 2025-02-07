@@ -1,5 +1,5 @@
-from AINodes.src.backend.output_socket import OutputSocket
-from AINodes.src.backend.input_node import InputNode
+from AINodes.src.sockets.output_socket import OutputSocket
+from AINodes.src.core.input_node import InputNode
 
 
 class SingleFloatInputNode(InputNode):
@@ -13,5 +13,4 @@ class SingleFloatInputNode(InputNode):
 
     def execute(self):
         self.outputs[0].value = self.value
-        print("Der wert ist " + str(self.value))
         return self.value

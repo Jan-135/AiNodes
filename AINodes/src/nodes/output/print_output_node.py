@@ -1,5 +1,5 @@
-from AINodes.src.backend.Input_Socket import InputSocket
-from AINodes.src.backend.output_node import OutputNode
+from AINodes.src.sockets.Input_socket import InputSocket
+from AINodes.src.core.output_node import OutputNode
 
 
 class PrintOutputNode(OutputNode):

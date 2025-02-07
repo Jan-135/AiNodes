@@ -1,15 +1,15 @@
 from abc import ABC, abstractmethod
 
-from AINodes.src.backend.node import Node
+from AINodes.src.core.node import Node
 
 
-class OutputNode(Node, ABC):
+class InputNode(Node, ABC):
     def __init__(self, node_id):
         super().__init__(node_id)
-        self.inputs = []
+        self.outputs = []
 
     @abstractmethod
-    def add_input(self, socket):
+    def add_output(self, socket):
         pass
 
     def execute(self):

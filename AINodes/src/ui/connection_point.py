@@ -2,7 +2,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QBrush, QColor, QPen
 from PySide6.QtWidgets import QGraphicsEllipseItem, QGraphicsSceneMouseEvent, QGraphicsItem, QGraphicsLineItem
 
-from AINodes.src.core.connection import Connection
+from AINodes.src.ui.connection import Connection
 
 
 class ConnectionPoint(QGraphicsEllipseItem):
