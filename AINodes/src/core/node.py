@@ -12,3 +12,6 @@ class Node(ABC):
 
     def execute(self):
         pass
+
+    def add_socket(self, socket_type: str, data_type: str, socket_key: str):
+        pass

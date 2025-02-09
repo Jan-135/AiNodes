@@ -2,12 +2,12 @@ from AINodes.src.core.basic_node import BasicNode
 
 
 class AddBasicNode(BasicNode):
-
     def __init__(self, node_id):
         super().__init__(node_id)
-        self.add_input("float")
-        self.add_input("float")
-        self.add_output("float")
+        self.input1 = self.add_socket("input", "float", "input_1")
+        self.input2 = self.add_socket("input", "float", "input_2")
+        self.output = self.add_socket("output", "float", "sum")
+
 
     def execute(self):
         value1 = self.inputs[0].pass_data() or 0

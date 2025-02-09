@@ -8,8 +8,10 @@ class SingleRandomValueInputNode(InputNode):
         super().__init__(node_id)
         self.min_value = min_value
         self.max_value = max_value
-        self.output = OutputSocket(self, "float", "random_value")
-        self.outputs.append(self.output)
+
+        # Output-Socket für den zufälligen Wert
+        self.output = self.add_socket("output", "float", "random_value")
+
 
     def execute(self):
         """Gibt einen zufälligen Wert zurück."""

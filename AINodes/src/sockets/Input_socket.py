@@ -3,10 +3,8 @@ from AINodes.src.core.socket import Socket
 
 
 class InputSocket(Socket):
-    def __init__(self, node: Node, data_type: str):
-        super().__init__(node, data_type)
-        self.connected_socket: "OutputSocket" | None = None  # Referenz zu einer OutputSocket
-
+    def __init__(self, node: Node, data_type: str, socket_key):
+        super().__init__(node, data_type, socket_key)
     def connect(self, output_socket: "OutputSocket"):
         if self.data_type != output_socket.data_type:
             raise TypeError("Cannot connect sockets with different data types!")

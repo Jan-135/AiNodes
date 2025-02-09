@@ -10,12 +10,11 @@ class ArrayToStringBasicNode(BasicNode):
         self.separator = separator
 
         # Input-Socket für das Array
-        self.input_array = InputSocket(self, "array")
-        self.inputs.append(self.input_array)
+        self.input_array = self.add_socket("input", "array", "input_array")
 
         # Output-Socket für den String
-        self.output_string = OutputSocket(self, "string", "string_output")
-        self.outputs.append(self.output_string)
+        self.output_string = self.add_socket("output", "string", "string_output")
+
 
     def execute(self):
         """Konvertiert das Array in einen String."""

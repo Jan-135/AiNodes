@@ -7,14 +7,13 @@ class AddAndMultiplyBasicNode(BasicNode):
         super().__init__(node_id)
 
         # Zwei Input-Sockets
-        self.input1 = InputSocket(self, "float")
-        self.input2 = InputSocket(self, "float")
-        self.inputs.extend([self.input1, self.input2])
+        self.input1 = self.add_socket("input", "float", "input_1")
+        self.input2 = self.add_socket("input", "float", "input_2")
 
         # Zwei Output-Sockets mit benannten Keys
-        self.output1 = OutputSocket(self, "float", "sum")  # Erstes Ergebnis
-        self.output2 = OutputSocket(self, "float", "product")  # Zweites Ergebnis
-        self.outputs.extend([self.output1, self.output2])
+        self.output1 = self.add_socket("output", "float", "sum")
+        self.output2 = self.add_socket("output", "float", "product")
+
 
     def execute(self):
         """Berechnet zwei Werte und speichert sie als Dictionary."""

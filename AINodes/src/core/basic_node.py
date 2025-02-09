@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 
 from AINodes.src.core.node import Node
 from AINodes.src.sockets.Input_socket import InputSocket
@@ -11,12 +11,14 @@ class BasicNode(Node, ABC):
         self.outputs = []
         self.inputs = []
 
-    def add_input(self, data_type):
-        socket = InputSocket(self, data_type)
-        self.inputs.append(socket)
-        return socket
-
-    def add_output(self, data_type):
-        socket = OutputSocket(self, data_type)
-        self.outputs.append(socket)
+    def add_socket(self, socket_type: str, data_type: str, socket_key: str):
+        """Creates and adds a new output or input socket to the node."""
+        if socket_type == "input":
+            socket = InputSocket(self, data_type, socket_key)
+            self.inputs.append(socket)
+        elif socket_type == "output":
+            socket = OutputSocket(self, data_type, socket_key)
+            self.outputs.append(socket)
+        else:
+            raise ValueError("Invalid socket type. Valid socket types: 'input' or 'output'.")
         return socket

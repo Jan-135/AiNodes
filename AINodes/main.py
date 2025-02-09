@@ -5,7 +5,9 @@ from AINodes.src.core.node_editor import NodeEditor
 from AINodes.src.nodes.basic.add_and_multiply_basic_node import AddAndMultiplyBasicNode
 from AINodes.src.nodes.basic.array_to_string_basic_node import ArrayToStringBasicNode
 from AINodes.src.nodes.basic.build_array_basic_node import BuildArrayBasicNode
+from AINodes.src.nodes.basic.float_to_string_basic_node import FloatToStringBasicNode
 from AINodes.src.nodes.basic.lineare_regression_basic_node import LinearRegressionNode
+from AINodes.src.nodes.basic.r2_score_basic_node import R2ScoreBasicNode
 from AINodes.src.nodes.input.single_float_input_node import SingleFloatInputNode
 from AINodes.src.nodes.input.single_random_value_input_node import SingleRandomValueInputNode
 from AINodes.src.nodes.output.print_output_node import PrintOutputNode
@@ -50,6 +52,8 @@ def main():
     x_test_node = BuildArrayBasicNode("x_test_builder")
     regression_node = LinearRegressionNode("linear_regression")
     output_node = PrintOutputNode("output_regression")
+    r2_score_node = R2ScoreBasicNode("r2_score")  # Neue Node für R²-Wert
+    float_to_string_node = FloatToStringBasicNode("float_to_string")
 
     # Zufällige Werte für Trainingsdaten generieren
     random_x_train = SingleRandomValueInputNode("random_x_train", min_value=1, max_value=10)
@@ -58,6 +62,7 @@ def main():
     length_node = SingleFloatInputNode("length", 5)  # Länge der Arrays
 
     array_to_string = ArrayToStringBasicNode("array_to_string")
+    output_r2 = PrintOutputNode("output_r2")
 
     # Verbinde Nodes
     random_x_train.outputs[0].connect(x_train_node.inputs[0])
@@ -71,8 +76,14 @@ def main():
     y_train_node.outputs[0].connect(regression_node.inputs[1])  # y_train
     x_test_node.outputs[0].connect(regression_node.inputs[2])  # X_test
 
-    regression_node.outputs[1].connect(array_to_string.inputs[0])  # Vorhersagen → Print Output
-    array_to_string.outputs[0].connect(output_node.inputs[0])
+    regression_node.outputs[1].connect(array_to_string.inputs[0])  # Vorhersagen → String
+    array_to_string.outputs[0].connect(output_node.inputs[0])  # String → Print Output
+
+    # Verbindung zur R²-Node mit Float zu String Umwandlung
+    y_train_node.outputs[0].connect(r2_score_node.inputs[0])  # y_true
+    regression_node.outputs[1].connect(r2_score_node.inputs[1])  # y_pred
+    r2_score_node.outputs[0].connect(float_to_string_node.inputs[0])
+    float_to_string_node.outputs[0].connect(output_r2.inputs[0])
 
     # Füge Nodes dem Editor hinzu
     editor.add_node(random_x_train)
@@ -83,7 +94,11 @@ def main():
     editor.add_node(y_train_node)
     editor.add_node(x_test_node)
     editor.add_node(regression_node)
+    editor.add_node(array_to_string)
     editor.add_node(output_node)
+    editor.add_node(r2_score_node)
+    editor.add_node(float_to_string_node)
+    editor.add_node(output_r2)
 
     # Führe Nodes aus
     editor.execute_all()
