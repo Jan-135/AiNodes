@@ -1,11 +1,8 @@
-from AINodes.src.core.basic_node import BasicNode
-from AINodes.src.sockets.Input_socket import InputSocket
-from AINodes.src.sockets.output_socket import OutputSocket
-from sklearn.linear_model import LinearRegression
 import numpy as np
-
-
 from sklearn.linear_model import LinearRegression
+
+from AINodes.src.core.basic_node import BasicNode
+
 
 class LinearRegressionNode(BasicNode):
     def __init__(self, node_id):
@@ -22,8 +19,7 @@ class LinearRegressionNode(BasicNode):
         self.output_model = self.add_socket("output", "model", "model")
         self.output_predictions = self.add_socket("output", "array", "predictions")
 
-
-    def execute(self):
+    def compute(self):
         """Trainiert eine lineare Regression und gibt das Modell & Vorhersagen zurück."""
         X_train = self.input_x_train.pass_data()
         y_train = self.input_y_train.pass_data()
@@ -46,4 +42,3 @@ class LinearRegressionNode(BasicNode):
             "model": self.model,
             "predictions": predictions.tolist()
         }
-

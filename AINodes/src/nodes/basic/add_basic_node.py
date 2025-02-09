@@ -8,8 +8,7 @@ class AddBasicNode(BasicNode):
         self.input2 = self.add_socket("input", "float", "input_2")
         self.output = self.add_socket("output", "float", "sum")
 
-
-    def execute(self):
+    def compute(self):
         value1 = self.inputs[0].pass_data() or 0
         value2 = self.inputs[1].pass_data() or 0
         return value1 + value2

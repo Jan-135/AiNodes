@@ -21,6 +21,4 @@ class InputNode(Node, ABC):
 
         return socket
 
-    @abstractmethod
-    def execute(self):
-        pass
+

@@ -26,7 +26,3 @@ class OutputNode(Node, ABC):
         else:
             raise ValueError("Invalid socket type. Valid socket types: 'input' or 'output'.")
         return socket
-
-    @abstractmethod
-    def execute(self):
-        pass

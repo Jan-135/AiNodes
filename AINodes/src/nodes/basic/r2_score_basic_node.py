@@ -16,7 +16,7 @@ class R2ScoreBasicNode(BasicNode):
         # Output: R²-Score
         self.output_score = self.add_socket("output", "float", "r2_score")
 
-    def execute(self):
+    def compute(self):
         """Berechnet den R²-Wert und gibt ihn aus."""
         y_true = self.input_y_true.pass_data()
         y_pred = self.input_y_pred.pass_data()

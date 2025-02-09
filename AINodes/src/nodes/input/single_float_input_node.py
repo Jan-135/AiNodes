@@ -1,4 +1,3 @@
-from AINodes.src.sockets.output_socket import OutputSocket
 from AINodes.src.core.input_node import InputNode
 
 
@@ -11,7 +10,6 @@ class SingleFloatInputNode(InputNode):
         # Output-Socket für den Wert
         self.output = self.add_socket("output", "float", "out")
 
-
-    def execute(self):
+    def compute(self):
         self.outputs[0].value = self.value
         return self.value

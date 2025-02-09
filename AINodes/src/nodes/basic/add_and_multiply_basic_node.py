@@ -2,6 +2,7 @@ from AINodes.src.core.basic_node import BasicNode
 from AINodes.src.sockets.Input_socket import InputSocket
 from AINodes.src.sockets.output_socket import OutputSocket
 
+
 class AddAndMultiplyBasicNode(BasicNode):
     def __init__(self, node_id):
         super().__init__(node_id)
@@ -14,8 +15,7 @@ class AddAndMultiplyBasicNode(BasicNode):
         self.output1 = self.add_socket("output", "float", "sum")
         self.output2 = self.add_socket("output", "float", "product")
 
-
-    def execute(self):
+    def compute(self):
         """Berechnet zwei Werte und speichert sie als Dictionary."""
         val1 = self.input1.pass_data()
         val2 = self.input2.pass_data()
@@ -27,6 +27,6 @@ class AddAndMultiplyBasicNode(BasicNode):
             return None
 
         return {
-            "sum": val1 + val2,         # Addition
-            "product": val1 * val2      # Multiplikation
+            "sum": val1 + val2,  # Addition
+            "product": val1 * val2  # Multiplikation
         }  # Gibt Dictionary zurück

@@ -1,4 +1,3 @@
-from AINodes.src.sockets.output_socket import OutputSocket
 from AINodes.src.core.input_node import InputNode
 
 
@@ -11,7 +10,5 @@ class SingleStringInputNode(InputNode):
         # Output-Socket für den String-Wert
         self.output = self.add_socket("output", "string", "out")
 
-
-
-    def execute(self):
+    def compute(self):
         return self.value

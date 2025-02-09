@@ -13,7 +13,7 @@ class FloatToStringBasicNode(BasicNode):
         # Output-Socket für den String-Wert
         self.output_string = self.add_socket("output", "string", "string_output")
 
-    def execute(self):
+    def compute(self):
         """Konvertiert den Float-Wert in einen String."""
         value = self.input_float.pass_data()
 

@@ -9,7 +9,7 @@ class PrintOutputNode(OutputNode):
     def add_input(self, socket):
         pass  # Already defined in constructor
 
-    def execute(self):
+    def compute(self):
         """Gibt den Wert des Inputs aus, falls eine Verbindung besteht."""
         if self.check_if_connected():
             data = self.inputs[0].pass_data()

@@ -15,8 +15,7 @@ class ArrayToStringBasicNode(BasicNode):
         # Output-Socket für den String
         self.output_string = self.add_socket("output", "string", "string_output")
 
-
-    def execute(self):
+    def compute(self):
         """Konvertiert das Array in einen String."""
         array_data = self.input_array.pass_data()
 

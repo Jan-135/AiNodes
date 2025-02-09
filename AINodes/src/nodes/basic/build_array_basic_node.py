@@ -16,8 +16,7 @@ class BuildArrayBasicNode(BasicNode):
         # Output-Socket für das generierte Array
         self.output = self.add_socket("output", "array", "generated_array")
 
-
-    def execute(self):
+    def compute(self):
         """Erzeugt ein Array mit neuen Zufallswerten für jede Abfrage."""
         array_length = self.length_input.pass_data()
 
