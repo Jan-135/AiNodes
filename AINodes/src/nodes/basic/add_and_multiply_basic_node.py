@@ -21,12 +21,9 @@ class AddAndMultiplyBasicNode(BasicNode):
         val2 = self.input2.pass_data()
 
         if val1 is None or val2 is None:
-            print(val1)
-            print(val2)
-            print("halloooooo")
             return None
 
         return {
-            "sum": val1 + val2,  # Addition
-            "product": val1 * val2  # Multiplikation
-        }  # Gibt Dictionary zurück
+            "sum": val1 + val2,
+            "product": val1 * val2
+        }
