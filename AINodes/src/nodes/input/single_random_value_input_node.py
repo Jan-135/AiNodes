@@ -4,15 +4,30 @@ from AINodes.src.core.input_node import InputNode
 
 
 class SingleRandomValueInputNode(InputNode):
-    def __init__(self, node_id, min_value=0, max_value=10):
-        """Erzeugt zufällige Werte zwischen min_value und max_value."""
-        super().__init__(node_id)
-        self.min_value = min_value
-        self.max_value = max_value
+    """
+    A node that generates a random floating-point value.
+    - The value is randomly selected from a specified range (min_value to max_value).
+    """
 
-        # Output-Socket für den zufälligen Wert
+    def __init__(self, node_id: str, min_value: float = 0.0, max_value: float = 1.0):
+        """
+        Initializes a single random value input node.
+
+        :param node_id: A unique identifier for the node.
+        :param min_value: The minimum possible generated value (inclusive).
+        :param max_value: The maximum possible generated value (inclusive).
+        """
+        super().__init__(node_id)
+        self.min_value: float = min_value
+        self.max_value: float = max_value
+
+        # Output socket for the random float value
         self.output = self.add_socket("output", "float", "random_value")
 
-    def compute(self):
-        """Gibt einen zufälligen Wert zurück."""
+    def compute(self) -> float:
+        """
+        Generates and returns a random floating-point number within the defined range.
+
+        :return: A randomly generated float between min_value and max_value.
+        """
         return random.uniform(self.min_value, self.max_value)
