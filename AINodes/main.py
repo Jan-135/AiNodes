@@ -10,10 +10,43 @@ from AINodes.src.nodes.basic.ml.lineare_regression_basic_node import LinearRegre
 from AINodes.src.nodes.basic.ml.r2_score_basic_node import R2ScoreBasicNode
 from AINodes.src.nodes.input.single_float_input_node import SingleFloatInputNode
 from AINodes.src.nodes.input.single_random_value_input_node import SingleRandomValueInputNode
+from AINodes.src.nodes.input.sklearn_dataset_input_node import SklearnDatasetInputNode
 from AINodes.src.nodes.output.print_output_node import PrintOutputNode
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))  # Add current directory to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "src")))  # Add "src" folder to path
+
+
+def test_sklearn_dataset():
+    print("🔍 Testing SklearnDatasetInputNode...")
+
+    # ✅ Only testing the working datasets
+    datasets_to_test = ["iris", "wine", "california_housing"]
+
+    for dataset_name in datasets_to_test:
+        print(f"\n📂 Loading dataset: {dataset_name}")
+
+        # Create dataset node
+        dataset_node = SklearnDatasetInputNode(node_id=f"dataset_{dataset_name}", dataset_name=dataset_name)
+
+        # Execute node to load data
+        output = dataset_node.compute()
+
+        if output is None:
+            print(f"❌ Failed to load dataset: {dataset_name}")
+            continue
+
+        # Extract outputs
+        dataset_dict = output.get("dataset_dict", {})
+        features = output.get("features", [])
+        targets = output.get("targets", [])
+
+        # Print results
+        print(f"✅ {dataset_name} - Features Shape: {len(features)} samples, {len(features[0]) if features else 0} features")
+        print(f"✅ {dataset_name} - Targets Shape: {len(targets)} labels")
+        print(f"🔹 Sample Features: {features[:3]}")
+        print(f"🔹 Sample Targets: {targets[:10]}")
+        print(f"🔹 Full Dataset Dict Keys: {list(dataset_dict.keys())}")
 
 
 def test_multiply_add() -> None:
@@ -125,4 +158,6 @@ if __name__ == "__main__":
     # sys.exit(app.exec())
 
     # Execute backend node-based system
-    main()
+    # main()
+    # Run the test
+    test_sklearn_dataset()
