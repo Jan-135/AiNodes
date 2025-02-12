@@ -2,14 +2,13 @@ import os
 import sys
 
 from AINodes.src.core.node_editor import NodeEditor
-from AINodes.src.nodes.basic.math.add_and_multiply_basic_node import AddAndMultiplyBasicNode
 from AINodes.src.nodes.basic.data.array_to_string_basic_node import ArrayToStringBasicNode
-from AINodes.src.nodes.basic.data.build_array_basic_node import BuildArrayBasicNode
+from AINodes.src.nodes.basic.data.data_split_node import DataSplitNode  # Import DataSplitNode
 from AINodes.src.nodes.basic.data.float_to_string_basic_node import FloatToStringBasicNode
+from AINodes.src.nodes.basic.math.add_and_multiply_basic_node import AddAndMultiplyBasicNode
 from AINodes.src.nodes.basic.ml.lineare_regression_basic_node import LinearRegressionNode
 from AINodes.src.nodes.basic.ml.r2_score_basic_node import R2ScoreBasicNode
 from AINodes.src.nodes.input.single_float_input_node import SingleFloatInputNode
-from AINodes.src.nodes.input.single_random_value_input_node import SingleRandomValueInputNode
 from AINodes.src.nodes.input.sklearn_dataset_input_node import SklearnDatasetInputNode
 from AINodes.src.nodes.output.print_output_node import PrintOutputNode
 
@@ -42,7 +41,8 @@ def test_sklearn_dataset():
         targets = output.get("targets", [])
 
         # Print results
-        print(f"✅ {dataset_name} - Features Shape: {len(features)} samples, {len(features[0]) if features else 0} features")
+        print(
+            f"✅ {dataset_name} - Features Shape: {len(features)} samples, {len(features[0]) if features else 0} features")
         print(f"✅ {dataset_name} - Targets Shape: {len(targets)} labels")
         print(f"🔹 Sample Features: {features[:3]}")
         print(f"🔹 Sample Targets: {targets[:10]}")
@@ -81,71 +81,167 @@ def test_multiply_add() -> None:
     editor.execute_all()
 
 
-def main() -> None:
+def main():
     """
-    Constructs and executes a node-based machine learning pipeline using linear regression.
-    - Generates random training and test data.
-    - Trains a linear regression model.
+    Constructs and executes a node-based machine learning pipeline using Linear Regression.
+    - Loads dataset (e.g., Iris).
+    - Splits dataset into train/test sets (90% train, 10% test).
+    - Trains a Linear Regression model.
     - Computes R² score for model evaluation.
     - Outputs predictions and R² score.
     """
     editor = NodeEditor()
 
-    # Create nodes
-    x_train_node = BuildArrayBasicNode("x_train_builder")
-    y_train_node = BuildArrayBasicNode("y_train_builder")
-    x_test_node = BuildArrayBasicNode("x_test_builder")
+    # Load dataset
+    dataset_node = SklearnDatasetInputNode("dataset_iris", dataset_name="iris")
+
+    # Create data split node
+    data_split_node = DataSplitNode("data_split", test_size=0.1, random_state=42)
+
+    # Create Linear Regression node
     regression_node = LinearRegressionNode("linear_regression")
-    output_node = PrintOutputNode("output_regression")
-    r2_score_node = R2ScoreBasicNode("r2_score")  # R² score calculation node
-    float_to_string_node = FloatToStringBasicNode("float_to_string")
 
-    # Generate random training data
-    random_x_train = SingleRandomValueInputNode("random_x_train", min_value=1, max_value=10)
-    random_y_train = SingleRandomValueInputNode("random_y_train", min_value=10, max_value=20)
-    random_x_test = SingleRandomValueInputNode("random_x_test", min_value=1, max_value=10)
-    length_node = SingleFloatInputNode("length", 5)  # Array length
+    # Create R² score node
+    r2_score_node = R2ScoreBasicNode("r2_score")
 
-    array_to_string = ArrayToStringBasicNode("array_to_string")
+    # Convert outputs to strings for display
+    array_to_string_predictions = ArrayToStringBasicNode("array_to_string_predictions")
+    float_to_string_r2 = FloatToStringBasicNode("float_to_string_r2")
+
+    # Output nodes
+    output_predictions = PrintOutputNode("output_predictions")
     output_r2 = PrintOutputNode("output_r2")
 
-    # Connect nodes
-    random_x_train.outputs[0].connect(x_train_node.inputs[0])
-    length_node.outputs[0].connect(x_train_node.inputs[1])
-    random_y_train.outputs[0].connect(y_train_node.inputs[0])
-    length_node.outputs[0].connect(y_train_node.inputs[1])
-    random_x_test.outputs[0].connect(x_test_node.inputs[0])
-    length_node.outputs[0].connect(x_test_node.inputs[1])
+    # Connect dataset outputs to the split node inputs
+    dataset_node.outputs[1].connect(data_split_node.inputs[0])  # Features → DataSplit
+    dataset_node.outputs[2].connect(data_split_node.inputs[1])  # Targets → DataSplit
 
-    x_train_node.outputs[0].connect(regression_node.inputs[0])  # X_train
-    y_train_node.outputs[0].connect(regression_node.inputs[1])  # y_train
-    x_test_node.outputs[0].connect(regression_node.inputs[2])  # X_test
+    # Connect train/test data to regression model
+    data_split_node.outputs[0].connect(regression_node.inputs[0])  # X_train
+    data_split_node.outputs[2].connect(regression_node.inputs[1])  # y_train
+    data_split_node.outputs[1].connect(regression_node.inputs[2])  # X_test
 
-    regression_node.outputs[1].connect(array_to_string.inputs[0])  # Predictions → String conversion
-    array_to_string.outputs[0].connect(output_node.inputs[0])  # String → Print Output
+    # Convert predictions to string before printing
+    regression_node.outputs[1].connect(array_to_string_predictions.inputs[0])
+    array_to_string_predictions.outputs[0].connect(output_predictions.inputs[0])
 
-    # Connect nodes for R² score calculation
-    y_train_node.outputs[0].connect(r2_score_node.inputs[0])  # y_true
+    # Compute and print R² score
+    data_split_node.outputs[3].connect(r2_score_node.inputs[0])  # y_test
     regression_node.outputs[1].connect(r2_score_node.inputs[1])  # y_pred
-    r2_score_node.outputs[0].connect(float_to_string_node.inputs[0])
-    float_to_string_node.outputs[0].connect(output_r2.inputs[0])
+    r2_score_node.outputs[0].connect(float_to_string_r2.inputs[0])
+    float_to_string_r2.outputs[0].connect(output_r2.inputs[0])
 
     # Add nodes to editor
-    editor.add_node(random_x_train)
-    editor.add_node(random_y_train)
-    editor.add_node(random_x_test)
-    editor.add_node(length_node)
-    editor.add_node(x_train_node)
-    editor.add_node(y_train_node)
-    editor.add_node(x_test_node)
+    editor.add_node(dataset_node)
+    editor.add_node(data_split_node)
     editor.add_node(regression_node)
-    editor.add_node(array_to_string)
-    editor.add_node(output_node)
     editor.add_node(r2_score_node)
-    editor.add_node(float_to_string_node)
+    editor.add_node(array_to_string_predictions)
+    editor.add_node(float_to_string_r2)
+    editor.add_node(output_predictions)
     editor.add_node(output_r2)
 
     # Execute nodes
+    editor.execute_all()
+
+
+def test_data_split_node():
+    """
+    Constructs and executes a node-based data processing pipeline using DataSplitNode.
+    - Loads dataset (e.g., Iris).
+    - Splits dataset into train/test sets (90% train, 10% test).
+    - Converts arrays to strings before printing.
+    """
+    print("🔍 Testing DataSplitNode...")
+
+    # Initialize Node Editor
+    editor = NodeEditor()
+
+    # Create dataset node (using Iris dataset)
+    dataset_node = SklearnDatasetInputNode("dataset_iris", dataset_name="iris")
+
+    # Create data split node
+    data_split_node = DataSplitNode("data_split", test_size=0.1, random_state=42)
+
+    # linear regression node
+
+    regression_node = LinearRegressionNode("linear_regression")
+
+    # create r2 score node
+
+    r2_score_node = R2ScoreBasicNode("r2_score")
+
+    # Create array-to-string conversion nodes
+    array_to_string_X_train = ArrayToStringBasicNode("array_to_string_X_train")
+    array_to_string_X_test = ArrayToStringBasicNode("array_to_string_X_test")
+    array_to_string_y_train = ArrayToStringBasicNode("array_to_string_y_train")
+    array_to_string_y_test = ArrayToStringBasicNode("array_to_string_y_test")
+    array_to_string_predictions = ArrayToStringBasicNode("array_to_string_predictions")
+
+    # Create float-to-string node for R² score
+    float_to_string_r2 = FloatToStringBasicNode("float_to_string_r2")
+
+    # Create print output nodes
+    output_X_train = PrintOutputNode("output_X_train")
+    output_X_test = PrintOutputNode("output_X_test")
+    output_y_train = PrintOutputNode("output_y_train")
+    output_y_test = PrintOutputNode("output_y_test")
+
+    output_predictions = PrintOutputNode("output_predictions")
+    output_r2_score = PrintOutputNode("output_r2_score")
+
+    # Connect dataset outputs to the split node inputs
+    dataset_node.outputs[1].connect(data_split_node.inputs[0])  # Features → DataSplit
+    dataset_node.outputs[2].connect(data_split_node.inputs[1])  # Targets → DataSplit
+
+    # Connect split outputs to the regression model
+    data_split_node.outputs[0].connect(regression_node.inputs[0])  # X_train
+    data_split_node.outputs[2].connect(regression_node.inputs[1])  # y_train
+    data_split_node.outputs[1].connect(regression_node.inputs[2])  # X_test
+
+    # Connect regression outputs
+    regression_node.outputs[1].connect(array_to_string_predictions.inputs[0])  # Predictions → Convert
+
+    # Connect regression predictions and y_test to R² score node
+    data_split_node.outputs[3].connect(r2_score_node.inputs[0])  # y_test (true values)
+    regression_node.outputs[1].connect(r2_score_node.inputs[1])  # Predictions
+
+    # Convert R² score to string before printing
+    r2_score_node.outputs[0].connect(float_to_string_r2.inputs[0])
+
+    # Connect outputs to print nodes
+    data_split_node.outputs[0].connect(array_to_string_X_train.inputs[0])  # X_train → Convert
+    data_split_node.outputs[1].connect(array_to_string_X_test.inputs[0])  # X_test → Convert
+    data_split_node.outputs[2].connect(array_to_string_y_train.inputs[0])  # y_train → Convert
+    data_split_node.outputs[3].connect(array_to_string_y_test.inputs[0])  # y_test → Convert
+
+    # Connect converted strings to print nodes
+    array_to_string_X_train.outputs[0].connect(output_X_train.inputs[0])
+    array_to_string_X_test.outputs[0].connect(output_X_test.inputs[0])
+    array_to_string_y_train.outputs[0].connect(output_y_train.inputs[0])
+    array_to_string_y_test.outputs[0].connect(output_y_test.inputs[0])
+    array_to_string_predictions.outputs[0].connect(output_predictions.inputs[0])
+    float_to_string_r2.outputs[0].connect(output_r2_score.inputs[0])
+
+    # Add nodes to the editor
+    editor.add_node(dataset_node)
+    editor.add_node(data_split_node)
+    editor.add_node(regression_node)
+    editor.add_node(r2_score_node)
+    editor.add_node(array_to_string_X_train)
+    editor.add_node(array_to_string_X_test)
+    editor.add_node(array_to_string_y_train)
+    editor.add_node(array_to_string_y_test)
+    editor.add_node(array_to_string_predictions)
+    editor.add_node(float_to_string_r2)
+    editor.add_node(output_X_train)
+    editor.add_node(output_X_test)
+    editor.add_node(output_y_train)
+    editor.add_node(output_y_test)
+    editor.add_node(output_predictions)
+    editor.add_node(output_r2_score)
+
+    # Execute the pipeline
     editor.execute_all()
 
 
@@ -160,4 +256,6 @@ if __name__ == "__main__":
     # Execute backend node-based system
     # main()
     # Run the test
-    test_sklearn_dataset()
+    # test_sklearn_dataset()
+    # Run the test
+    test_data_split_node()

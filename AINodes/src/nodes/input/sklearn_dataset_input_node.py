@@ -1,5 +1,7 @@
 from typing import Optional, Dict, List, Union
+
 from sklearn import datasets
+
 from AINodes.src.core.input_node import InputNode
 
 
@@ -31,7 +33,7 @@ class SklearnDatasetInputNode(InputNode):
         # Define output sockets
         self.output_dict = self.add_socket("output", "dict", "dataset_dict")  # Full dataset as dictionary
         self.output_X = self.add_socket("output", "array", "features")  # Feature matrix (X)
-        self.output_y = self.add_socket("output", "array", "targets")   # Target labels (y)
+        self.output_y = self.add_socket("output", "array", "targets")  # Target labels (y)
 
     def compute(self) -> Optional[Dict[str, Union[Dict[str, List[Union[float, int]]], List[List[float]], List[int]]]]:
         """
