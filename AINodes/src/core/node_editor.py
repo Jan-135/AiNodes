@@ -1,24 +1,90 @@
+import json
+import os
+
 from AINodes.src.core.node import Node
 from AINodes.src.core.output_node import OutputNode
-from typing import List
+from AINodes.src.scripts import generate_nodes_json
+
+# Path to nodes.json in the data folder
+DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data"))
+NODES_JSON_PATH = os.path.join(DATA_DIR, "nodes.json")
 
 
 class NodeEditor:
     """
     Manages nodes in the system.
     - Stores, removes, and executes nodes.
-    - Resets caches when needed.
+    - Handles cache resets when needed.
     """
 
-    def __init__(self):
-        """Initializes the NodeEditor with an empty list of nodes."""
-        self.nodes: List[Node] = []
+    def __init__(self, json_file="nodes.json"):
+        """
+        Initializes the NodeEditor and loads the node factory.
+
+        If the JSON file does not exist or is empty, it will automatically generate a new one.
+
+        :param json_file: The filename of the node configuration JSON file.
+        """
+        if not os.path.exists(NODES_JSON_PATH) or os.stat(NODES_JSON_PATH).st_size == 0:
+            print("⚠ `nodes.json` is missing or empty – Generating a new file...")
+            generate_nodes_json.find_nodes()  # Automatically generate the JSON file
+
+        self.nodes = []
+        self.node_factory = self.load_node_factory(NODES_JSON_PATH)
+
+    @staticmethod
+    def load_node_factory(json_file):
+        """
+        Loads the node factory dictionary from a JSON file.
+
+        :param json_file: The path to the JSON file containing node mappings.
+        :return: A dictionary mapping node names to their respective classes.
+        """
+        with open(json_file, "r") as f:
+            node_mapping = json.load(f)
+
+        factory = {}
+        for node_name, class_path in node_mapping.items():
+            module_name, class_name = class_path.rsplit(".", 1)
+            module = __import__(module_name, fromlist=[class_name])
+            node_class = getattr(module, class_name)
+            factory[node_name] = node_class
+
+        return factory
+
+    def create_node(self, node_type: str):
+        """
+        Creates a node based on a given string identifier.
+
+        :param node_type: The type of node to create.
+        :return: An instance of the created node.
+        :raises ValueError: If the specified node type does not exist.
+        """
+        node_class = self.node_factory.get(node_type)
+        print(self.node_factory)
+        print(node_type)
+        print(node_class)
+        if node_class:
+            return node_class(node_type)
+        else:
+            raise ValueError(f"Unknown node type: {node_type}")
+
+    def add_new_node(self, node_type: str):
+        """
+        Creates and adds a new node to the editor.
+
+        :param node_type: The type of node to create.
+        :return: The newly created node.
+        """
+        new_node = self.create_node(node_type)
+        self.add_node(new_node)
+        return new_node
 
     def add_node(self, node: "Node") -> None:
         """
-        Adds a node to the editor.
+        Adds an existing node to the editor.
 
-        :param node: The node to be added.
+        :param node: The node instance to be added.
         """
         self.nodes.append(node)
 
@@ -26,7 +92,7 @@ class NodeEditor:
         """
         Removes a node from the editor.
 
-        :param node: The node to be removed.
+        :param node: The node instance to be removed.
         """
         if node in self.nodes:
             self.nodes.remove(node)
@@ -41,8 +107,11 @@ class NodeEditor:
     def execute_all(self) -> None:
         """
         Executes all output nodes to process the computation graph.
-        - First, it clears all caches to ensure a fresh execution.
-        - Then, it starts execution from all output nodes.
+
+        Steps:
+        1. Clears all caches to ensure a fresh execution.
+        2. Identifies all output nodes in the system.
+        3. Executes each output node to process data.
         """
         self.clear_all_caches()
 

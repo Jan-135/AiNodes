@@ -1,6 +1,8 @@
 import os
 import sys
 
+from PySide6.QtWidgets import QApplication
+
 from AINodes.src.core.node_editor import NodeEditor
 from AINodes.src.nodes.basic.data.array_to_string_basic_node import ArrayToStringBasicNode
 from AINodes.src.nodes.basic.data.data_split_node import DataSplitNode  # Import DataSplitNode
@@ -11,6 +13,8 @@ from AINodes.src.nodes.basic.ml.r2_score_basic_node import R2ScoreBasicNode
 from AINodes.src.nodes.input.single_float_input_node import SingleFloatInputNode
 from AINodes.src.nodes.input.sklearn_dataset_input_node import SklearnDatasetInputNode
 from AINodes.src.nodes.output.print_output_node import PrintOutputNode
+from AINodes.src.ui.graphic_node import GraphicNode
+from AINodes.src.ui.main_window import MainWindow
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))  # Add current directory to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "src")))  # Add "src" folder to path
@@ -58,7 +62,8 @@ def test_multiply_add() -> None:
     editor = NodeEditor()
 
     # Create nodes
-    input_node_1 = SingleFloatInputNode("input_1", 10)
+    input_node_1 = editor.add_new_node("SingleFloatInputNode")
+    #input_node_1 = SingleFloatInputNode("input_1", 10)
     input_node_2 = SingleFloatInputNode("input_2", 10)
     process_node = AddAndMultiplyBasicNode("process")
     output_node_1 = PrintOutputNode("output_1")
@@ -245,6 +250,21 @@ def test_data_split_node():
     editor.execute_all()
 
 
+def test_ui():
+    app = QApplication([])
+    editor = MainWindow()
+    editor.show()
+
+    node1 = GraphicNode("Standard Node", x=0, y=0, num_inputs=5, num_outputs=2)
+    node2 = GraphicNode("Input Node", x=-200, y=0, num_inputs=0, num_outputs=2)
+    node3 = GraphicNode("Output Node", x=200, y=0, num_inputs=2, num_outputs=0)
+
+    editor.scene.addItem(node1)
+    editor.scene.addItem(node2)
+    editor.scene.addItem(node3)
+
+    app.exec()
+
 if __name__ == "__main__":
     # UI-related code (commented out)
     # print(a)
@@ -258,4 +278,10 @@ if __name__ == "__main__":
     # Run the test
     # test_sklearn_dataset()
     # Run the test
-    test_data_split_node()
+    # test_data_split_node()
+    #test_ui()
+    test_multiply_add()
+
+
+
+
