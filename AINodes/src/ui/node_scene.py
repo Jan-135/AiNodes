@@ -3,6 +3,7 @@ from typing import List
 from PySide6.QtGui import QColor, QBrush
 from PySide6.QtWidgets import QGraphicsScene
 
+from AINodes.src.core.node import Node
 from AINodes.src.ui.graphic_node import GraphicNode
 
 
@@ -14,12 +15,9 @@ class NodeScene(QGraphicsScene):
 
         self.nodes: List[GraphicNode] = []
 
-    def add_new_node(self):
+    def add_new_node(self, node: Node):
 
-
-
-
-        newGraphicNode = GraphicNode()
+        newGraphicNode = GraphicNode(node)
         self.nodes.append(newGraphicNode)
         self.addItem(newGraphicNode)
 

@@ -33,7 +33,7 @@ class NodeEditor:
         self.node_factory = self.load_node_factory(NODES_JSON_PATH)
 
     @staticmethod
-    def load_node_factory(json_file):
+    def load_node_factory(json_file) -> {}:
         """
         Loads the node factory dictionary from a JSON file.
 
@@ -52,7 +52,7 @@ class NodeEditor:
 
         return factory
 
-    def create_node(self, node_type: str):
+    def create_node(self, node_type: str) -> Node:
         """
         Creates a node based on a given string identifier.
 
@@ -69,7 +69,7 @@ class NodeEditor:
         else:
             raise ValueError(f"Unknown node type: {node_type}")
 
-    def add_new_node(self, node_type: str):
+    def add_new_node(self, node_type: str) -> Node:
         """
         Creates and adds a new node to the editor.
 

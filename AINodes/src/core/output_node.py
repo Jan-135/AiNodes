@@ -19,7 +19,7 @@ class OutputNode(Node, ABC):
         :param node_id: A unique identifier for the node.
         """
         super().__init__(node_id)
-        self.inputs: List[InputSocket] = []  # List of input sockets
+
 
     def check_if_connected(self) -> bool:
         """

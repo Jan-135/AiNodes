@@ -1,11 +1,12 @@
 from __future__ import annotations  # Enables forward type declarations
 from typing import TYPE_CHECKING, Optional, Any
 
-from AINodes.src.core.node import Node
+
 from AINodes.src.sockets.socket import Socket
 
 if TYPE_CHECKING:
     from AINodes.src.sockets.output_socket import OutputSocket  # Only imported for type hints
+    from AINodes.src.core.node import Node
 
 
 class InputSocket(Socket):

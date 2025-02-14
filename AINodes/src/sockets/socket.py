@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 
-from AINodes.src.core.node import Node
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from AINodes.src.core.node import Node
 
 
 class Socket(ABC):
@@ -10,7 +13,7 @@ class Socket(ABC):
     - Each socket is linked to a parent node.
     """
 
-    def __init__(self, node: Node, data_type: str, socket_key: str):
+    def __init__(self, node, data_type: str, socket_key: str):
         """
         Initializes a socket with a reference to its parent node.
 

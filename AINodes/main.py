@@ -255,13 +255,13 @@ def test_ui():
     editor = MainWindow()
     editor.show()
 
-    node1 = GraphicNode("Standard Node", x=0, y=0, num_inputs=5, num_outputs=2)
-    node2 = GraphicNode("Input Node", x=-200, y=0, num_inputs=0, num_outputs=2)
-    node3 = GraphicNode("Output Node", x=200, y=0, num_inputs=2, num_outputs=0)
-
-    editor.scene.addItem(node1)
-    editor.scene.addItem(node2)
-    editor.scene.addItem(node3)
+    # node1 = GraphicNode("Standard Node", x=0, y=0, num_inputs=5, num_outputs=2)
+    # node2 = GraphicNode("Input Node", x=-200, y=0, num_inputs=0, num_outputs=2)
+    # node3 = GraphicNode("Output Node", x=200, y=0, num_inputs=2, num_outputs=0)
+    #
+    # editor.scene.addItem(node1)
+    # editor.scene.addItem(node2)
+    # editor.scene.addItem(node3)
 
     app.exec()
 
@@ -279,8 +279,8 @@ if __name__ == "__main__":
     # test_sklearn_dataset()
     # Run the test
     # test_data_split_node()
-    #test_ui()
-    test_multiply_add()
+    test_ui()
+    # test_multiply_add()
 
 
 

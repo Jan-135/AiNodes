@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import Any, Optional
+from typing import Any, Optional, List
+
+from AINodes.src.sockets.input_socket import InputSocket
+from AINodes.src.sockets.output_socket import OutputSocket
 
 
 class Node(ABC):
@@ -17,6 +20,8 @@ class Node(ABC):
         """
         self.node_id: str = node_id  # Unique identifier for the node
         self.output_cache: Optional[Any] = None  # Cache for the last computed output
+        self.outputs: List[OutputSocket] = []  # List of output sockets
+        self.inputs: List[InputSocket] = []  # List of input sockets
 
     def get_id(self) -> str:
         """
