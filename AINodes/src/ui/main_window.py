@@ -58,7 +58,6 @@ class MainWindow(QMainWindow):
         :param node_type: The type of node to create.
         """
         new_node = self.node_editor.add_new_node(node_type)  # Create new node
-        print("Diese Node: " + str(new_node))
         self.scene.add_new_node(new_node)
 
 

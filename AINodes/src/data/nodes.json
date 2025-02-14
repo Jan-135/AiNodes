@@ -1,0 +1,15 @@
+{
+    "ArrayToStringBasicNode": "AINodes.src.nodes.basic.data.array_to_string_basic_node.ArrayToStringBasicNode",
+    "BuildArrayBasicNode": "AINodes.src.nodes.basic.data.build_array_basic_node.BuildArrayBasicNode",
+    "DataSplitNode": "AINodes.src.nodes.basic.data.data_split_node.DataSplitNode",
+    "FloatToStringBasicNode": "AINodes.src.nodes.basic.data.float_to_string_basic_node.FloatToStringBasicNode",
+    "AddAndMultiplyBasicNode": "AINodes.src.nodes.basic.math.add_and_multiply_basic_node.AddAndMultiplyBasicNode",
+    "AddBasicNode": "AINodes.src.nodes.basic.math.add_basic_node.AddBasicNode",
+    "LinearRegressionNode": "AINodes.src.nodes.basic.ml.lineare_regression_basic_node.LinearRegressionNode",
+    "R2ScoreBasicNode": "AINodes.src.nodes.basic.ml.r2_score_basic_node.R2ScoreBasicNode",
+    "SingleFloatInputNode": "AINodes.src.nodes.input.single_float_input_node.SingleFloatInputNode",
+    "SingleRandomValueInputNode": "AINodes.src.nodes.input.single_random_value_input_node.SingleRandomValueInputNode",
+    "SingleStringInputNode": "AINodes.src.nodes.input.single_string_input_node.SingleStringInputNode",
+    "SklearnDatasetInputNode": "AINodes.src.nodes.input.sklearn_dataset_input_node.SklearnDatasetInputNode",
+    "PrintOutputNode": "AINodes.src.nodes.output.print_output_node.PrintOutputNode"
+}

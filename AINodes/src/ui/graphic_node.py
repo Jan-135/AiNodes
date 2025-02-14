@@ -9,7 +9,7 @@ class GraphicNode(QGraphicsItem):
     def __init__(self, parent: Node = None, x=0, y=0):
         super().__init__()
 
-        print("Parent: " + str(parent))
+
         self.setFlag(QGraphicsItem.ItemIsMovable)
         self.setFlag(QGraphicsItem.ItemIsSelectable)
 

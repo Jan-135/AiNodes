@@ -61,9 +61,7 @@ class NodeEditor:
         :raises ValueError: If the specified node type does not exist.
         """
         node_class = self.node_factory.get(node_type)
-        print(self.node_factory)
-        print(node_type)
-        print(node_class)
+
         if node_class:
             return node_class(node_type)
         else:
