@@ -3,12 +3,12 @@ from PySide6.QtGui import QBrush, QColor, QPen, QPainterPath, QTextOption
 from PySide6.QtWidgets import QGraphicsItem, QGraphicsEllipseItem, QGraphicsTextItem
 
 from AINodes.src.core.node import Node
+from AINodes.src.ui.graphic_socket import GraphicSocket
 
 
 class GraphicNode(QGraphicsItem):
     def __init__(self, parent: Node = None, x=0, y=0):
         super().__init__()
-
 
         self.setFlag(QGraphicsItem.ItemIsMovable)
         self.setFlag(QGraphicsItem.ItemIsSelectable)
@@ -31,8 +31,8 @@ class GraphicNode(QGraphicsItem):
         # Input-Sockets
         for i in range(self.num_inputs):
             socket_y = -self.total_height / 2 + self.title_height + (i * 30) + 15
-            socket = QGraphicsEllipseItem(-self.width / 2 - 5, socket_y, 10, 10, self)
-            socket.setBrush(QBrush(QColor(48, 48, 48)))  # Rot für Inputs
+            socket = GraphicSocket(-self.width / 2 + 35, socket_y / 2, self)
+            socket.setBrush(QBrush(QColor(48, 48, 48)))
             socket.setPen(QPen(QBrush(QColor(126, 126, 126)), 1))
 
             self.sockets.append(socket)
@@ -45,8 +45,8 @@ class GraphicNode(QGraphicsItem):
         # Output-Sockets
         for i in range(self.num_outputs):
             socket_y = -self.total_height / 2 + self.title_height + (i * 30) + 15 + (self.num_inputs * 30)
-            socket = QGraphicsEllipseItem(self.width / 2 - 5, socket_y, 10, 10, self)
-            socket.setBrush(QBrush(QColor(48, 48, 48)))  # Grün für Outputs
+            socket = GraphicSocket(self.width / 2 - 40, socket_y / 2, self)
+            socket.setBrush(QBrush(QColor(48, 48, 48)))
             socket.setPen(QPen(QBrush(QColor(126, 126, 126)), 1))
 
             self.sockets.append(socket)

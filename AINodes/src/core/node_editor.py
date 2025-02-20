@@ -4,6 +4,7 @@ import os
 from AINodes.src.core.node import Node
 from AINodes.src.core.output_node import OutputNode
 from AINodes.src.scripts import generate_nodes_json
+from AINodes.src.sockets.socket import Socket
 
 # Path to nodes.json in the data folder
 DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data"))
@@ -116,3 +117,6 @@ class NodeEditor:
         for node in self.nodes:
             if isinstance(node, OutputNode):
                 node.execute()
+
+    def connect_sockets(self, start_socket: Socket, end_socket: Socket):
+        start_socket.connect(end_socket)

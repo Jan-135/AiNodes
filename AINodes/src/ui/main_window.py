@@ -3,6 +3,7 @@ from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QMainWindow, QToolBar, QMenu, QPushButton
 
 from AINodes.src.ui.graph_view import GraphView
+from AINodes.src.ui.graphic_socket import GraphicSocket
 from AINodes.src.ui.node_scene import NodeScene
 from AINodes.src.core.node_editor import NodeEditor
 
@@ -59,6 +60,13 @@ class MainWindow(QMainWindow):
         """
         new_node = self.node_editor.add_new_node(node_type)  # Create new node
         self.scene.add_new_node(new_node)
+
+    def add_connection(self, start_socket: GraphicSocket, end_socket: GraphicSocket):
+
+        result = self.node_editor.connect_sockets(start_socket, end_socket)
+
+        if result:
+            self.scene.add_new_connection(start_socket, end_socket)
 
 
     def keyPressEvent(self, event):

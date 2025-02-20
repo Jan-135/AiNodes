@@ -17,7 +17,7 @@ class Connection(QGraphicsLineItem):
         if self.end_socket:
             end_pos = self.end_socket.sceneBoundingRect().center()
         else:
-            end_pos = start_pos  # Temporäre Linie, die noch nicht verbunden ist
+            end_pos = start_pos
         self.setLine(start_pos.x(), start_pos.y(), end_pos.x(), end_pos.y())
 
     def mousePressEvent(self, event: QGraphicsSceneMouseEvent):

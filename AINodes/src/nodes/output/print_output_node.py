@@ -17,7 +17,7 @@ class PrintOutputNode(OutputNode):
         :param node_id: A unique identifier for the node.
         """
         super().__init__(node_id)
-        self.add_socket("input", "float", "input")  # Adds a single input socket for strings
+        self.add_socket("input", "string", "input")  # Adds a single input socket for strings
 
     def add_input(self, socket: InputSocket) -> None:
         """

@@ -215,7 +215,8 @@ def test_data_split_node():
     r2_score_node.outputs[0].connect(float_to_string_r2.inputs[0])
 
     # Connect outputs to print nodes
-    data_split_node.outputs[0].connect(array_to_string_X_train.inputs[0])  # X_train → Convert
+    editor.connect_sockets(data_split_node.outputs[0], array_to_string_X_train.inputs[0])
+    #data_split_node.outputs[0].connect(array_to_string_X_train.inputs[0])  # X_train → Convert
     data_split_node.outputs[1].connect(array_to_string_X_test.inputs[0])  # X_test → Convert
     data_split_node.outputs[2].connect(array_to_string_y_train.inputs[0])  # y_train → Convert
     data_split_node.outputs[3].connect(array_to_string_y_test.inputs[0])  # y_test → Convert

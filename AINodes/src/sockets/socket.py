@@ -34,3 +34,6 @@ class Socket(ABC):
         :return: The data being transferred through this socket.
         """
         pass
+
+    def connect(self):
+        pass
