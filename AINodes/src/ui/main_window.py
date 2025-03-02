@@ -37,6 +37,12 @@ class MainWindow(QMainWindow):
         self.add_node_button.setMenu(self.create_node_menu())
         self.toolbar.addWidget(self.add_node_button)
 
+        self.run_button = QPushButton("Run")
+        self.toolbar.addWidget(self.run_button)
+        self.run_button.clicked.connect(self.on_run_button_clicked)
+    def on_run_button_clicked(self):
+        self.controller.run()
+
     def create_node_menu(self):
         """
         Creates a dropdown menu listing all available nodes.
@@ -50,6 +56,8 @@ class MainWindow(QMainWindow):
             action.triggered.connect(lambda checked=False, name=node_name: self.controller.add_node(name))
 
         return menu
+
+
 
     def keyPressEvent(self, event):
         """

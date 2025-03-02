@@ -96,3 +96,6 @@ class GraphController(QObject):
             self.start_socket = socket_id
         else:
             self.create_connection(self.start_socket, socket_id)
+
+    def run(self):
+        self.node_editor.execute_all()
