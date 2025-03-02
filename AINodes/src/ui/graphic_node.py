@@ -13,7 +13,9 @@ class GraphicNode(QGraphicsItem):
         self.setFlag(QGraphicsItem.ItemIsMovable)
         self.setFlag(QGraphicsItem.ItemIsSelectable)
 
+        self.node_type = parent.node_type
         self.node_id = parent.node_id
+
         self.num_inputs = len(parent.inputs)
         self.num_outputs = len(parent.outputs)
 
@@ -31,13 +33,14 @@ class GraphicNode(QGraphicsItem):
         # Input-Sockets
         for i in range(self.num_inputs):
             socket_y = -self.total_height / 2 + self.title_height + (i * 30) + 15
-            socket = GraphicSocket(-self.width / 2 + 35, socket_y / 2, self)
+            socket_id = parent.inputs[i].socket_id
+            socket = GraphicSocket(socket_id, -self.width / 2 + 35, socket_y / 2, self)
             socket.setBrush(QBrush(QColor(48, 48, 48)))
             socket.setPen(QPen(QBrush(QColor(126, 126, 126)), 1))
 
             self.sockets.append(socket)
 
-            label = QGraphicsTextItem(parent.inputs[i].socket_key, self)
+            label = QGraphicsTextItem(parent.inputs[i].socket_name, self)
             label.setDefaultTextColor(Qt.white)
             label.setPos(- self.width / 2 + 5, socket_y - 8)
             self.socket_labels.append(label)
@@ -45,13 +48,14 @@ class GraphicNode(QGraphicsItem):
         # Output-Sockets
         for i in range(self.num_outputs):
             socket_y = -self.total_height / 2 + self.title_height + (i * 30) + 15 + (self.num_inputs * 30)
-            socket = GraphicSocket(self.width / 2 - 40, socket_y / 2, self)
+            socket_id = parent.outputs[i].socket_id
+            socket = GraphicSocket(socket_id, self.width / 2 - 40, socket_y / 2, self)
             socket.setBrush(QBrush(QColor(48, 48, 48)))
             socket.setPen(QPen(QBrush(QColor(126, 126, 126)), 1))
 
             self.sockets.append(socket)
 
-            label = QGraphicsTextItem(parent.outputs[i].socket_key, self)
+            label = QGraphicsTextItem(parent.outputs[i].socket_name, self)
             label.adjustSize()
             label.document().setDefaultTextOption(QTextOption(Qt.AlignRight))
             label.setDefaultTextColor(Qt.white)
@@ -77,4 +81,4 @@ class GraphicNode(QGraphicsItem):
 
         # Titeltext zeichnen
         painter.setPen(QColor(255, 255, 255))  # Weiße Schrift
-        painter.drawText(self.title_rect, Qt.AlignCenter, self.node_id)
+        painter.drawText(self.title_rect, Qt.AlignCenter, self.node_type)

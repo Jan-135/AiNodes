@@ -12,15 +12,15 @@ class DataSplitNode(BasicNode):
     - Outputs `X_train`, `X_test`, `y_train`, `y_test`, and `random_state`.
     """
 
-    def __init__(self, node_id: str, test_size: float = 0.1, random_state: int = 42):
+    def __init__(self, node_type: str, test_size: float = 0.1, random_state: int = 42):
         """
         Initializes the DataSplitNode.
 
-        :param node_id: Unique identifier for the node.
+        :param node_type: Unique identifier for the node.
         :param test_size: Proportion of data to be used for testing (default: 10%).
         :param random_state: Default random state if no input is connected.
         """
-        super().__init__(node_id)
+        super().__init__(node_type)
         self.test_size = test_size
         self.default_random_state = random_state  # Default seed
 

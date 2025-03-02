@@ -22,13 +22,13 @@ class LinearRegressionNode(MlNode):
     - `predictions` (array): Predicted values for X_test.
     """
 
-    def __init__(self, node_id: str):
+    def __init__(self, node_type: str):
         """
         Initializes a linear regression node.
 
-        :param node_id: A unique identifier for the node.
+        :param node_type: A unique identifier for the node.
         """
-        super().__init__(node_id)
+        super().__init__(node_type)
         self.model = LinearRegression()  # Instance of the linear regression model
 
         # Define input sockets

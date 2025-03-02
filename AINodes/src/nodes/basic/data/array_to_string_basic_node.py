@@ -10,14 +10,14 @@ class ArrayToStringBasicNode(BasicNode):
     - Uses a specified separator to join array elements.
     """
 
-    def __init__(self, node_id: str, separator: str = ", "):
+    def __init__(self, node_type: str, separator: str = ", "):
         """
         Initializes an array-to-string conversion node.
 
-        :param node_id: A unique identifier for the node.
+        :param node_type: A unique identifier for the node.
         :param separator: The separator used to join array elements in the output string.
         """
-        super().__init__(node_id)
+        super().__init__(node_type)
         self.separator: str = separator  # Stores the separator for formatting
 
         # Define input socket for the array

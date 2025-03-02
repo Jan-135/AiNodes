@@ -12,13 +12,13 @@ class MlNode(BasicNode, ABC):
     - Provides a common interface for ML-related nodes.
     """
 
-    def __init__(self, node_id: str):
+    def __init__(self, node_type: str):
         """
         Initializes a machine learning node.
 
-        :param node_id: Unique identifier for the node.
+        :param node_type: Unique identifier for the node.
         """
-        super().__init__(node_id)
+        super().__init__(node_type)
 
     @abstractmethod
     def compute(self) -> Any:

@@ -9,15 +9,15 @@ class SingleRandomValueInputNode(InputNode):
     - The value is randomly selected from a specified range (min_value to max_value).
     """
 
-    def __init__(self, node_id: str, min_value: float = 0.0, max_value: float = 1.0):
+    def __init__(self, node_type: str, min_value: float = 0.0, max_value: float = 1.0):
         """
         Initializes a single random value input node.
 
-        :param node_id: A unique identifier for the node.
+        :param node_type: A unique identifier for the node.
         :param min_value: The minimum possible generated value (inclusive).
         :param max_value: The maximum possible generated value (inclusive).
         """
-        super().__init__(node_id)
+        super().__init__(node_type)
         self.min_value: float = min_value
         self.max_value: float = max_value
 

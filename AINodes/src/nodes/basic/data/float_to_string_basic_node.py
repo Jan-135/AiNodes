@@ -9,14 +9,14 @@ class FloatToStringBasicNode(BasicNode):
     - Takes a float input and outputs a string representation with a specified precision.
     """
 
-    def __init__(self, node_id: str, precision: int = 2):
+    def __init__(self, node_type: str, precision: int = 2):
         """
         Initializes a float-to-string conversion node.
 
-        :param node_id: A unique identifier for the node.
+        :param node_type: A unique identifier for the node.
         :param precision: The number of decimal places in the output string.
         """
-        super().__init__(node_id)
+        super().__init__(node_type)
         self.precision: int = precision  # Defines how many decimal places to include
 
         # Define input socket for the float value

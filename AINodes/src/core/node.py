@@ -12,13 +12,15 @@ class Node(ABC):
     - Must be extended by specific node types.
     """
 
-    def __init__(self, node_id: str):
+    def __init__(self, node_type: str, node_id: str = None):
         """
         Initializes a node with a unique identifier and an output cache.
 
-        :param node_id: A unique identifier for the node.
+        :param node_type: A unique identifier for the node.
         """
-        self.node_id: str = node_id  # Unique identifier for the node
+        print("Backend Node has been created: " + node_type)
+        self.node_type: str = node_type  # Unique identifier for the node
+        self.node_id = node_id
         self.output_cache: Optional[Any] = None  # Cache for the last computed output
         self.outputs: List[OutputSocket] = []  # List of output sockets
         self.inputs: List[InputSocket] = []  # List of input sockets
@@ -29,7 +31,11 @@ class Node(ABC):
 
         :return: The node's ID as a string.
         """
-        return self.node_id
+        return self.node_type
+
+    def set_id(self, new_id):
+        if self.node_id is None:
+            self.node_id = new_id
 
     def execute(self) -> Any:
         """

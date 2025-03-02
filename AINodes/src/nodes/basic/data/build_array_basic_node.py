@@ -10,13 +10,13 @@ class BuildArrayBasicNode(BasicNode):
     - The length input determines the size of the generated array.
     """
 
-    def __init__(self, node_id: str):
+    def __init__(self, node_type: str):
         """
         Initializes an array-building node.
 
-        :param node_id: A unique identifier for the node.
+        :param node_type: A unique identifier for the node.
         """
-        super().__init__(node_id)
+        super().__init__(node_type)
 
         # Define input sockets: Random value source & array length
         self.random_input = self.add_socket("input", "float", "random_input")

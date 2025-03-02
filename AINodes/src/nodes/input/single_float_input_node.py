@@ -6,14 +6,14 @@ class SingleFloatInputNode(InputNode):
     - This node generates a predefined float value when executed.
     """
 
-    def __init__(self, node_id: str, value: float = 0.0):
+    def __init__(self, node_type: str, value: float = 0.0):
         """
         Initializes a single-float input node with a fixed value.
 
-        :param node_id: A unique identifier for the node.
+        :param node_type: A unique identifier for the node.
         :param value: The predefined float value that this node will output.
         """
-        super().__init__(node_id)
+        super().__init__(node_type)
         self.value: float = value  # Stores the predefined float value
 
         # Output socket for the float value

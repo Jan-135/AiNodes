@@ -1,5 +1,6 @@
 import json
 import os
+import uuid
 
 from AINodes.src.core.node import Node
 from AINodes.src.core.output_node import OutputNode
@@ -64,7 +65,11 @@ class NodeEditor:
         node_class = self.node_factory.get(node_type)
 
         if node_class:
-            return node_class(node_type)
+            random_id = str(uuid.uuid4())
+            new_node = node_class(node_type)
+            new_node.set_id(random_id)
+
+            return new_node
         else:
             raise ValueError(f"Unknown node type: {node_type}")
 
@@ -76,7 +81,8 @@ class NodeEditor:
         :return: The newly created node.
         """
         new_node = self.create_node(node_type)
-        self.add_node(new_node)
+        print(new_node)
+        self.nodes.append(new_node)
         return new_node
 
     def add_node(self, node: "Node") -> None:
@@ -93,6 +99,7 @@ class NodeEditor:
 
         :param node: The node instance to be removed.
         """
+
         if node in self.nodes:
             self.nodes.remove(node)
 
@@ -118,5 +125,32 @@ class NodeEditor:
             if isinstance(node, OutputNode):
                 node.execute()
 
-    def connect_sockets(self, start_socket: Socket, end_socket: Socket):
+    def connect_sockets(self, start_socket: Socket, end_socket: Socket) -> None:
         start_socket.connect(end_socket)
+
+    def connect_sockets_by_id(self, output_socket_id: str, input_socket_id: str) -> None:
+        output_socket = self.get_socket_by_id(output_socket_id)
+        input_socket = self.get_socket_by_id(input_socket_id)
+
+        output_socket.connect(input_socket)
+
+    def get_node_by_id(self, node_id: str) -> Node:
+        for node in self.nodes:
+            if node.node_id == node_id:
+                return node
+        return None
+
+    def remove_node_by_id(self, node_id: str) -> None:
+        """Entfernt einen Node anhand seiner ID."""
+        self.nodes = [node for node in self.nodes if node.node_id != node_id]
+
+    def get_node_types(self) -> list:
+        return list(self.node_factory.keys())
+
+    def get_socket_by_id(self, socket_id):
+        """Sucht einen Socket anhand seiner ID."""
+        for node in self.nodes:
+            for socket in node.inputs + node.outputs:
+                if socket.socket_id == socket_id:
+                    return socket
+        return None

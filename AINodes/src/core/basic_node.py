@@ -14,13 +14,13 @@ class BasicNode(Node, ABC):
     - This class is intended to be inherited by more specific node types.
     """
 
-    def __init__(self, node_id: str):
+    def __init__(self, node_type: str):
         """
         Initializes a basic node with input and output socket lists.
 
-        :param node_id: A unique identifier for the node.
+        :param node_type: A unique identifier for the node.
         """
-        super().__init__(node_id)
+        super().__init__(node_type)
 
 
     def add_socket(self, socket_type: str, data_type: str, socket_key: str) -> Socket:

@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 
 from typing import TYPE_CHECKING
 
+import uuid
+
 if TYPE_CHECKING:
     from AINodes.src.core.node import Node
 
@@ -13,17 +15,19 @@ class Socket(ABC):
     - Each socket is linked to a parent node.
     """
 
-    def __init__(self, node, data_type: str, socket_key: str):
+    def __init__(self, parent_node, data_type: str, socket_name: str):
         """
         Initializes a socket with a reference to its parent node.
 
-        :param node: The parent node to which this socket belongs.
+        :param parent_node: The parent node to which this socket belongs.
         :param data_type: The data type this socket handles (e.g., "float", "string").
-        :param socket_key: A unique identifier for this socket within the node.
+        :param socket_name: A unique identifier for this socket within the node.
         """
-        self.node: Node = node  # Reference to parent node
+
+        self.socket_id = str(uuid.uuid4())
+        self.parent_node: Node = parent_node  # Reference to parent node
         self.data_type: str = data_type  # Type of data this socket handles
-        self.socket_key: str = socket_key  # Unique identifier for the socket
+        self.socket_name: str = socket_name  # Unique identifier for the socket
 
     @abstractmethod
     def pass_data(self):

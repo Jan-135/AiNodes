@@ -20,14 +20,14 @@ class SklearnDatasetInputNode(InputNode):
         "california_housing": datasets.fetch_california_housing,
     }
 
-    def __init__(self, node_id: str, dataset_name: str = "iris"):
+    def __init__(self, node_type: str, dataset_name: str = "iris"):
         """
         Initializes the dataset input node.
 
-        :param node_id: A unique identifier for the node.
+        :param node_type: A unique identifier for the node.
         :param dataset_name: The name of the dataset to load.
         """
-        super().__init__(node_id)
+        super().__init__(node_type)
         self.dataset_name: str = dataset_name  # Selected dataset name
 
         # Define output sockets

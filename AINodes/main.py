@@ -1,9 +1,6 @@
 import os
 import sys
 
-from PySide6.QtWidgets import QApplication
-
-from AINodes.src.core.node_editor import NodeEditor
 from AINodes.src.nodes.basic.data.array_to_string_basic_node import ArrayToStringBasicNode
 from AINodes.src.nodes.basic.data.data_split_node import DataSplitNode  # Import DataSplitNode
 from AINodes.src.nodes.basic.data.float_to_string_basic_node import FloatToStringBasicNode
@@ -13,11 +10,43 @@ from AINodes.src.nodes.basic.ml.r2_score_basic_node import R2ScoreBasicNode
 from AINodes.src.nodes.input.single_float_input_node import SingleFloatInputNode
 from AINodes.src.nodes.input.sklearn_dataset_input_node import SklearnDatasetInputNode
 from AINodes.src.nodes.output.print_output_node import PrintOutputNode
-from AINodes.src.ui.graphic_node import GraphicNode
-from AINodes.src.ui.main_window import MainWindow
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))  # Add current directory to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "src")))  # Add "src" folder to path
+
+from PySide6.QtWidgets import QApplication
+from AINodes.src.ui.main_window import MainWindow
+from AINodes.src.core.node_editor import NodeEditor
+from AINodes.src.controller.graph_controller import GraphController
+
+
+class Main:
+    """
+    Startet die Anwendung und initialisiert alle Kernkomponenten.
+    - Verwaltet NodeEditor (Model), GraphController (Controller) und MainWindow (View).
+    - Verknüpft alle Komponenten miteinander.
+    """
+
+    def __init__(self):
+        self.app = QApplication([])  # Qt Anwendung
+
+        # 🎯 Erstelle Model, View und Controller unabhängig
+        self.node_editor = NodeEditor()  # Model (Daten & Logik)
+
+        self.graph_controller = GraphController(self.node_editor)  # Controller
+        self.main_window = MainWindow(self.graph_controller)# View (GUI)
+
+        # 🎯 Setze die Instanzen in MainWindow (damit View auf Controller zugreifen kann)
+        self.graph_controller.set_graph_view(self.main_window.scene)
+
+    def run(self):
+        """ Startet die Qt-App. """
+        self.main_window.show()
+        self.app.exec()
+
+def test_mvc():
+    main = Main()
+    main.run()
 
 
 def test_sklearn_dataset():
@@ -30,7 +59,7 @@ def test_sklearn_dataset():
         print(f"\n📂 Loading dataset: {dataset_name}")
 
         # Create dataset node
-        dataset_node = SklearnDatasetInputNode(node_id=f"dataset_{dataset_name}", dataset_name=dataset_name)
+        dataset_node = SklearnDatasetInputNode(node_type=f"dataset_{dataset_name}", dataset_name=dataset_name)
 
         # Execute node to load data
         output = dataset_node.compute()
@@ -63,7 +92,7 @@ def test_multiply_add() -> None:
 
     # Create nodes
     input_node_1 = editor.add_new_node("SingleFloatInputNode")
-    #input_node_1 = SingleFloatInputNode("input_1", 10)
+    # input_node_1 = SingleFloatInputNode("input_1", 10)
     input_node_2 = SingleFloatInputNode("input_2", 10)
     process_node = AddAndMultiplyBasicNode("process")
     output_node_1 = PrintOutputNode("output_1")
@@ -216,7 +245,7 @@ def test_data_split_node():
 
     # Connect outputs to print nodes
     editor.connect_sockets(data_split_node.outputs[0], array_to_string_X_train.inputs[0])
-    #data_split_node.outputs[0].connect(array_to_string_X_train.inputs[0])  # X_train → Convert
+    # data_split_node.outputs[0].connect(array_to_string_X_train.inputs[0])  # X_train → Convert
     data_split_node.outputs[1].connect(array_to_string_X_test.inputs[0])  # X_test → Convert
     data_split_node.outputs[2].connect(array_to_string_y_train.inputs[0])  # y_train → Convert
     data_split_node.outputs[3].connect(array_to_string_y_test.inputs[0])  # y_test → Convert
@@ -266,6 +295,7 @@ def test_ui():
 
     app.exec()
 
+
 if __name__ == "__main__":
     # UI-related code (commented out)
     # print(a)
@@ -280,9 +310,6 @@ if __name__ == "__main__":
     # test_sklearn_dataset()
     # Run the test
     # test_data_split_node()
-    test_ui()
+    # test_ui()
     # test_multiply_add()
-
-
-
-
+    test_mvc()

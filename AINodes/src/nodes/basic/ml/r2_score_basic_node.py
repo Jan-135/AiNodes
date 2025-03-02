@@ -12,13 +12,13 @@ class R2ScoreBasicNode(BasicNode):
     - Compares predicted values with actual values to evaluate model performance.
     """
 
-    def __init__(self, node_id: str):
+    def __init__(self, node_type: str):
         """
         Initializes an R² score node.
 
-        :param node_id: A unique identifier for the node.
+        :param node_type: A unique identifier for the node.
         """
-        super().__init__(node_id)
+        super().__init__(node_type)
 
         # Inputs: True values & predicted values
         self.input_y_true = self.add_socket("input", "array", "y_true")

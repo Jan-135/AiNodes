@@ -10,13 +10,13 @@ class PrintOutputNode(OutputNode):
     - Accepts a single input socket of type "string".
     """
 
-    def __init__(self, node_id: str):
+    def __init__(self, node_type: str):
         """
         Initializes a print output node.
 
-        :param node_id: A unique identifier for the node.
+        :param node_type: A unique identifier for the node.
         """
-        super().__init__(node_id)
+        super().__init__(node_type)
         self.add_socket("input", "string", "input")  # Adds a single input socket for strings
 
     def add_input(self, socket: InputSocket) -> None:
@@ -39,8 +39,8 @@ class PrintOutputNode(OutputNode):
             data: Any = self.inputs[0].pass_data()
             if isinstance(data, list):
                 formatted_data = ", ".join(f"{value:.2f}" for value in data)  # Rounds to 2 decimal places
-                print(f"Output Node {self.node_id} received: [{formatted_data}]")
+                print(f"Output Node {self.node_type} received: [{formatted_data}]")
             else:
-                print(f"Output Node {self.node_id} received: {data}")
+                print(f"Output Node {self.node_type} received: {data}")
         else:
-            print(f"This Node has no connected Input: {self.node_id}")
+            print(f"This Node has no connected Input: {self.node_type}")

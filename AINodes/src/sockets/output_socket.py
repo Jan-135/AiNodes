@@ -14,15 +14,15 @@ class OutputSocket(Socket):
     - Output sockets provide data to input sockets of other nodes.
     """
 
-    def __init__(self, node: Node, data_type: str, socket_key: str):
+    def __init__(self, parent_node: Node, data_type: str, socket_name: str):
         """
         Initializes an output socket.
 
-        :param node: The parent node to which this output socket belongs.
+        :param parent_node: The parent node to which this output socket belongs.
         :param data_type: The data type this socket handles (e.g., "float", "string").
-        :param socket_key: A unique identifier for this socket within the node.
+        :param socket_name: A unique identifier for this socket within the node.
         """
-        super().__init__(node, data_type, socket_key)
+        super().__init__(parent_node, data_type, socket_name)
 
     def pass_data(self) -> any:
         """
@@ -33,10 +33,10 @@ class OutputSocket(Socket):
 
         :return: The data stored in the node's execution output.
         """
-        result = self.node.execute()
+        result = self.parent_node.execute()
 
-        if isinstance(result, dict) and self.socket_key in result:
-            return result[self.socket_key]
+        if isinstance(result, dict) and self.socket_name in result:
+            return result[self.socket_name]
 
         return result
 

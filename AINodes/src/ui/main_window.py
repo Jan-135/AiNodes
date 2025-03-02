@@ -1,11 +1,9 @@
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QMainWindow, QToolBar, QMenu, QPushButton
 
+from AINodes.src.controller.graph_controller import GraphController
 from AINodes.src.ui.graph_view import GraphView
-from AINodes.src.ui.graphic_socket import GraphicSocket
 from AINodes.src.ui.node_scene import NodeScene
-from AINodes.src.core.node_editor import NodeEditor
 
 
 class MainWindow(QMainWindow):
@@ -15,28 +13,28 @@ class MainWindow(QMainWindow):
     - Allows users to create nodes dynamically.
     """
 
-    def __init__(self):
+    def __init__(self, controller: GraphController = None):
         super().__init__()
         self.setWindowTitle("Node-based AI Editor")
         self.setGeometry(100, 100, 800, 600)
 
-        # Initialize Node Scene & View
-        self.scene = NodeScene()
+
+
+        # Initialisiere Node Scene & View
+        self.scene = NodeScene(controller)
         self.view = GraphView(self.scene)
         self.setCentralWidget(self.view)
 
-        # Initialize Node Editor
-        self.node_editor = NodeEditor()
+        # Setze den Controller
+        self.controller = controller
 
-        # Create Toolbar
+        # Erstelle Toolbar
         self.toolbar = QToolBar("Main Toolbar")
         self.addToolBar(self.toolbar)
 
-        # Create "Add Node" button (which opens a dropdown menu)
+        # Erstelle "Add Node" Button
         self.add_node_button = QPushButton("Add Node", self)
-        self.add_node_button.setMenu(self.create_node_menu())  # Assign the dropdown menu
-
-        # Add Button to Toolbar
+        self.add_node_button.setMenu(self.create_node_menu())
         self.toolbar.addWidget(self.add_node_button)
 
     def create_node_menu(self):
@@ -45,33 +43,22 @@ class MainWindow(QMainWindow):
         :return: A QMenu object with node options.
         """
         menu = QMenu(self)
+        nodes_list = self.controller.get_available_nodes()
 
-        # Add each node as a selectable action
-        for node_name in self.node_editor.node_factory.keys():
+        for node_name in nodes_list:
             action = menu.addAction(node_name)
-            action.triggered.connect(lambda checked=False, name=node_name: self.add_selected_node(name))
+            action.triggered.connect(lambda checked=False, name=node_name: self.controller.add_node(name))
 
         return menu
 
-    def add_selected_node(self, node_type):
-        """
-        Adds the selected node from the dropdown menu to the scene.
-        :param node_type: The type of node to create.
-        """
-        new_node = self.node_editor.add_new_node(node_type)  # Create new node
-        self.scene.add_new_node(new_node)
-
-    def add_connection(self, start_socket: GraphicSocket, end_socket: GraphicSocket):
-
-        result = self.node_editor.connect_sockets(start_socket, end_socket)
-
-        if result:
-            self.scene.add_new_connection(start_socket, end_socket)
-
-
     def keyPressEvent(self, event):
         """
-        Closes the application when the Escape key is pressed.
+        Beendet die Anwendung bei Escape.
         """
         if event.key() == Qt.Key_Escape:
             self.close()
+
+    def set_controller(self, graph_controller):
+        self.controller = graph_controller
+        self.scene.controller = graph_controller
+        print(graph_controller)

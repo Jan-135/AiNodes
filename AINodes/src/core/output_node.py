@@ -12,13 +12,13 @@ class OutputNode(Node, ABC):
     - They can only have input sockets (not output sockets).
     """
 
-    def __init__(self, node_id: str):
+    def __init__(self, node_type: str):
         """
         Initializes an output node with a unique identifier.
 
-        :param node_id: A unique identifier for the node.
+        :param node_type: A unique identifier for the node.
         """
-        super().__init__(node_id)
+        super().__init__(node_type)
 
 
     def check_if_connected(self) -> bool:

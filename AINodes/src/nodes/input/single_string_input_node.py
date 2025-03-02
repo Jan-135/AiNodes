@@ -7,14 +7,14 @@ class SingleStringInputNode(InputNode):
     - This node generates a predefined string when executed.
     """
 
-    def __init__(self, node_id: str, value: str = ""):
+    def __init__(self, node_type: str, value: str = ""):
         """
         Initializes a single-string input node with a fixed value.
 
-        :param node_id: A unique identifier for the node.
+        :param node_type: A unique identifier for the node.
         :param value: The predefined string value that this node will output.
         """
-        super().__init__(node_id)
+        super().__init__(node_type)
         self.value: str = value  # Stores the predefined string value
 
         # Output socket for the string value

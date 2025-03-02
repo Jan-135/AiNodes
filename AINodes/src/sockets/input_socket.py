@@ -15,15 +15,15 @@ class InputSocket(Socket):
     - Input sockets receive data from output sockets of other nodes.
     """
 
-    def __init__(self, node: Node, data_type: str, socket_key: str):
+    def __init__(self, parent_node: Node, data_type: str, socket_name: str):
         """
         Initializes an input socket.
 
-        :param node: The parent node to which this input socket belongs.
+        :param parent_node: The parent node to which this input socket belongs.
         :param data_type: The data type this socket handles (e.g., "float", "string").
-        :param socket_key: A unique identifier for this socket within the node.
+        :param socket_name: A unique identifier for this socket within the node.
         """
-        super().__init__(node, data_type, socket_key)
+        super().__init__(parent_node, data_type, socket_name)
         self.connected_socket: Optional[OutputSocket] = None  # Stores reference to connected output socket
 
     def connect(self, output_socket: "OutputSocket") -> None:
@@ -37,7 +37,7 @@ class InputSocket(Socket):
         """
         if self.data_type != output_socket.data_type:
             raise TypeError("Cannot connect sockets with different data types!")
-        if self.node == output_socket.node:
+        if self.parent_node == output_socket.parent_node:
             raise TypeError("Cannot connect sockets of the same node!")
 
         self.connected_socket = output_socket  # Store the connection reference
@@ -54,8 +54,8 @@ class InputSocket(Socket):
             new_value = self.connected_socket.pass_data()
 
             # Reset cache if the value has changed
-            if new_value != self.node.output_cache:
-                self.node.output_cache = None
+            if new_value != self.parent_node.output_cache:
+                self.parent_node.output_cache = None
 
             return new_value
         return None

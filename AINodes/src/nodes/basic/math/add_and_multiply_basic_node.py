@@ -10,13 +10,13 @@ class AddAndMultiplyBasicNode(BasicNode):
     - Outputs their sum and product.
     """
 
-    def __init__(self, node_id: str):
+    def __init__(self, node_type: str):
         """
         Initializes an addition and multiplication node.
 
-        :param node_id: A unique identifier for the node.
+        :param node_type: A unique identifier for the node.
         """
-        super().__init__(node_id)
+        super().__init__(node_type)
 
         # Define input sockets
         self.input1 = self.add_socket("input", "float", "input_1")
