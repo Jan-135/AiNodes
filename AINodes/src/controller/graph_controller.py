@@ -59,10 +59,10 @@ class GraphController(QObject):
         """
 
         try:
-
             self.node_editor.connect_sockets_by_id(output_socket_id, input_socket_id)
+            print(f"Connnection worked!")
         except:
-            print(f"Connection failed")
+            print(f"Connection failed: {output_socket_id}, {input_socket_id}")
             return
         self.graph_scene.add_connection_view(output_socket_id, input_socket_id)
         self.start_socket = None

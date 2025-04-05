@@ -13,6 +13,8 @@ class GraphicNode(QGraphicsItem):
         self.setFlag(QGraphicsItem.ItemIsMovable)
         self.setFlag(QGraphicsItem.ItemIsSelectable)
 
+        self.setFlag(QGraphicsItem.ItemSendsGeometryChanges)
+
         self.node_type = parent.node_type
         self.node_id = parent.node_id
 
@@ -82,3 +84,10 @@ class GraphicNode(QGraphicsItem):
         # Titeltext zeichnen
         painter.setPen(QColor(255, 255, 255))  # Weiße Schrift
         painter.drawText(self.title_rect, Qt.AlignCenter, self.node_type)
+
+    def itemChange(self, change, value):
+        if change == QGraphicsItem.ItemPositionChange:
+            for socket in self.sockets:
+                for connection in getattr(socket, "connections", []):
+                    connection.update_position()
+        return super().itemChange(change, value)

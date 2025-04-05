@@ -12,6 +12,10 @@ class Connection(QGraphicsLineItem):
         self.setPen(QPen(QColor(200, 200, 200), 2))  # Helle graue Linie
         self.update_position()
 
+        start_socket.connections.append(self)
+        if end_socket:
+            end_socket.connections.append(self)
+
     def update_position(self):
         start_pos = self.start_socket.sceneBoundingRect().center()
         if self.end_socket:

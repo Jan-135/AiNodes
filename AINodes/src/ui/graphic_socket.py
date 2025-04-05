@@ -1,8 +1,11 @@
+from typing import List
+
 from PySide6.QtCore import Qt, Signal, QObject
 from PySide6.QtGui import QBrush, QColor, QPen
 from PySide6.QtWidgets import QGraphicsEllipseItem, QGraphicsSceneMouseEvent, QGraphicsItem, QGraphicsLineItem
 
 from AINodes.src.ui.connection import Connection
+
 
 
 class GraphicSocket(QObject, QGraphicsEllipseItem):
@@ -20,6 +23,8 @@ class GraphicSocket(QObject, QGraphicsEllipseItem):
         self.relative_x = x_pos
         self.relative_y = y_pos
         self.is_input = is_input
+
+        self.connections = []
 
         self.update_position()
 
