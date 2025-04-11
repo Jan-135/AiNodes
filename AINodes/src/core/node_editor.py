@@ -154,3 +154,20 @@ class NodeEditor:
                 if socket.socket_id == socket_id:
                     return socket
         return None
+
+    def serialize_graph(self) -> dict:
+        data = {
+            "nodes": [],
+            "connections": []
+        }
+
+        for node in self.nodes:
+            graphic_node = getattr(node, "graphic", None)
+
+            node_data = {
+                "position": position,
+                "id": node.get_id(),
+                "type": node.__class__.__name__,
+                "params": {}
+
+            }

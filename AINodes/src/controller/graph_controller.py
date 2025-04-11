@@ -99,3 +99,10 @@ class GraphController(QObject):
 
     def run(self):
         self.node_editor.execute_all()
+
+    def get_graph_position(self, id: str) -> (float, float):
+        nodes = self.graph_scene.nodes
+        for node in nodes:
+            if node.node_id == id:
+                position =  node.pos()
+                return position.x(), position.y()
