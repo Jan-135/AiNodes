@@ -44,3 +44,7 @@ class PrintOutputNode(OutputNode):
                 print(f"Output Node {self.node_type} received: {data}")
         else:
             print(f"This Node has no connected Input: {self.node_type}")
+
+    def serialize_parameters(self) -> dict:
+        return {
+        }

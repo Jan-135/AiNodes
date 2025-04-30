@@ -1,4 +1,4 @@
-from PySide6.QtCore import Qt, QRectF
+from PySide6.QtCore import Qt, QRectF, QPointF
 from PySide6.QtGui import QBrush, QColor, QPen, QPainterPath, QTextOption
 from PySide6.QtWidgets import QGraphicsItem, QGraphicsEllipseItem, QGraphicsTextItem
 
@@ -9,6 +9,8 @@ from AINodes.src.ui.graphic_socket import GraphicSocket
 class GraphicNode(QGraphicsItem):
     def __init__(self, parent: Node = None, x=0, y=0):
         super().__init__()
+        self.setPos(x, y)
+
 
         self.setFlag(QGraphicsItem.ItemIsMovable)
         self.setFlag(QGraphicsItem.ItemIsSelectable)
@@ -16,6 +18,7 @@ class GraphicNode(QGraphicsItem):
         self.setFlag(QGraphicsItem.ItemSendsGeometryChanges)
 
         self.node_type = parent.node_type
+        print(parent.node_id)
         self.node_id = parent.node_id
 
         self.num_inputs = len(parent.inputs)
@@ -36,7 +39,8 @@ class GraphicNode(QGraphicsItem):
         for i in range(self.num_inputs):
             socket_y = -self.total_height / 2 + self.title_height + (i * 30) + 15
             socket_id = parent.inputs[i].socket_id
-            socket = GraphicSocket(socket_id, -self.width / 2 + 35, socket_y / 2, self)
+
+            socket = GraphicSocket(socket_id, socket_x := -self.width / 2 -5, socket_y, self)
             socket.setBrush(QBrush(QColor(48, 48, 48)))
             socket.setPen(QPen(QBrush(QColor(126, 126, 126)), 1))
 
@@ -51,7 +55,8 @@ class GraphicNode(QGraphicsItem):
         for i in range(self.num_outputs):
             socket_y = -self.total_height / 2 + self.title_height + (i * 30) + 15 + (self.num_inputs * 30)
             socket_id = parent.outputs[i].socket_id
-            socket = GraphicSocket(socket_id, self.width / 2 - 40, socket_y / 2, self)
+
+            socket = GraphicSocket(socket_id, socket_x := self.width / 2 -5, socket_y, self)
             socket.setBrush(QBrush(QColor(48, 48, 48)))
             socket.setPen(QPen(QBrush(QColor(126, 126, 126)), 1))
 
@@ -64,6 +69,9 @@ class GraphicNode(QGraphicsItem):
 
             label.setPos(self.width / 2 - label.boundingRect().width() - 5, socket_y - 8)
             self.socket_labels.append(label)
+
+        # for socket in self.sockets:
+        #     socket.update_position()
 
     def boundingRect(self):
         return self.rect

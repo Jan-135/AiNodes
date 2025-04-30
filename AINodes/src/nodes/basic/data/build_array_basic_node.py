@@ -43,3 +43,6 @@ class BuildArrayBasicNode(BasicNode):
         generated_array = [self.random_input.pass_data() for _ in range(int(array_length))]
 
         return {"generated_array": generated_array}
+
+    def serialize_parameters(self) -> dict:
+        return {}

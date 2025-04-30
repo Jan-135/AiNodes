@@ -1,6 +1,8 @@
 import json
 import os
 import uuid
+from pprint import pprint
+from typing import Dict
 
 from AINodes.src.core.node import Node
 from AINodes.src.core.output_node import OutputNode
@@ -11,6 +13,11 @@ from AINodes.src.sockets.socket import Socket
 DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data"))
 NODES_JSON_PATH = os.path.join(DATA_DIR, "nodes.json")
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from AINodes.src.controller.graph_controller import GraphController
+
 
 class NodeEditor:
     """
@@ -19,7 +26,7 @@ class NodeEditor:
     - Handles cache resets when needed.
     """
 
-    def __init__(self, json_file="nodes.json"):
+    def __init__(self, controller, json_file="nodes.json"):
         """
         Initializes the NodeEditor and loads the node factory.
 
@@ -30,6 +37,8 @@ class NodeEditor:
         if not os.path.exists(NODES_JSON_PATH) or os.stat(NODES_JSON_PATH).st_size == 0:
             print("⚠ `nodes.json` is missing or empty – Generating a new file...")
             generate_nodes_json.find_nodes()  # Automatically generate the JSON file
+
+        self.controller = controller
 
         self.nodes = []
         self.node_factory = self.load_node_factory(NODES_JSON_PATH)
@@ -54,7 +63,7 @@ class NodeEditor:
 
         return factory
 
-    def create_node(self, node_type: str) -> Node:
+    def create_node(self, node_type: str, id=None, parameters: Dict ={}) -> Node:
         """
         Creates a node based on a given string identifier.
 
@@ -65,9 +74,11 @@ class NodeEditor:
         node_class = self.node_factory.get(node_type)
 
         if node_class:
-            random_id = str(uuid.uuid4())
-            new_node = node_class(node_type)
-            new_node.set_id(random_id)
+            new_node = node_class(node_type, **parameters)
+            if id is None:
+                new_node.set_id(str(uuid.uuid4()))
+            else:
+                new_node.set_id(id)
 
             return new_node
         else:
@@ -85,7 +96,7 @@ class NodeEditor:
         self.nodes.append(new_node)
         return new_node
 
-    def add_node(self, node: "Node") -> None:
+    def add_node(self, node: Node) -> None:
         """
         Adds an existing node to the editor.
 
@@ -157,17 +168,63 @@ class NodeEditor:
 
     def serialize_graph(self) -> dict:
         data = {
-            "nodes": [],
-            "connections": []
+            "nodes": []
         }
 
         for node in self.nodes:
-            graphic_node = getattr(node, "graphic", None)
-
             node_data = {
-                "position": position,
+                "position": self.controller.get_position(node.get_id()),
                 "id": node.get_id(),
                 "type": node.__class__.__name__,
-                "params": {}
-
+                "params": node.serialize_parameters(),
+                "input_connections": node.serialize_sockets(),
+                "parameters": node.serialize_parameters()
             }
+            data["nodes"].append(node_data)
+        return data
+
+    def save_graph_to_file(self, filepath: str):
+        graph_data = self.serialize_graph()
+        print(graph_data)
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(graph_data, f, indent=4)
+
+    def load_graph_from_file(self, filepath: str):
+        node_registry = self.load_node_factory(NODES_JSON_PATH)
+
+        with open(filepath, "r", encoding="utf-8") as f:
+            graph_data = json.load(f)
+
+        id_to_node = {}
+
+        for node_data in graph_data["nodes"]:
+            if node_data["type"] in node_registry:
+                parameters = node_data.get("parameters", {})
+                new_node = self.create_node(node_data["type"], id = node_data["id"], parameters =  parameters)
+                x = node_data["position"]["x"]
+                y = node_data["position"]["y"]
+
+                self.controller.add_node(new_node, x, y)
+                id_to_node[node_data["id"]] = new_node
+
+        for node_data in graph_data["nodes"]:
+            this_node = id_to_node.get(node_data["id"])
+            input_conns = node_data.get("input_connections", {})
+
+            for input_key, conn in input_conns.items():
+                if conn is None:
+
+                    continue
+
+                from_node = id_to_node.get(conn["connected_node"])
+                if not from_node:
+
+                    continue
+
+
+                out_socket = next((s for s in from_node.outputs if s.socket_name == conn["connected_socket"]), None)
+                in_socket = next((s for s in this_node.inputs if s.socket_name == input_key), None)
+
+                if out_socket and in_socket:
+                    print("Weiter gegeben an Controller")
+                    self.controller.create_connection(out_socket.socket_id, in_socket.socket_id)

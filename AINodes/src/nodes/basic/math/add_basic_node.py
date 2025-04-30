@@ -1,3 +1,5 @@
+import json
+
 from AINodes.src.core.basic_node import BasicNode
 from typing import Optional, Union
 
@@ -23,6 +25,8 @@ class AddBasicNode(BasicNode):
         # Define output socket
         self.output = self.add_socket("output", "float", "sum")
 
+
+
     def compute(self) -> float:
         """
         Computes the sum of the two input values.
@@ -33,3 +37,8 @@ class AddBasicNode(BasicNode):
         value2: Optional[Union[float, int]] = self.inputs[1].pass_data() or 0
 
         return float(value1) + float(value2)
+
+
+    def serialize_parameters(self) -> dict:
+        return {
+        }

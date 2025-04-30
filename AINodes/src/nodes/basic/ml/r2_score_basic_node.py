@@ -47,3 +47,6 @@ class R2ScoreBasicNode(BasicNode):
         # Compute the R² score
         score = r2_score(y_true, y_pred)
         return {"r2_score": score}
+
+    def serialize_parameters(self)-> dict:
+        return {}

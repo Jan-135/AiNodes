@@ -31,3 +31,9 @@ class SingleRandomValueInputNode(InputNode):
         :return: A randomly generated float between min_value and max_value.
         """
         return random.uniform(self.min_value, self.max_value)
+
+    def serialize_parameters(self) -> dict:
+        return {
+            "min_value": self.min_value,
+            "max_value": self.max_value,
+        }

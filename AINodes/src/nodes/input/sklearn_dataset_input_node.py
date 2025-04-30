@@ -66,3 +66,8 @@ class SklearnDatasetInputNode(InputNode):
         except Exception as e:
             print(f"Error loading dataset '{self.dataset_name}': {e}")
             return None
+
+    def serialize_parameters(self) -> dict:
+        return {
+            "dataset_name": self.dataset_name,
+        }

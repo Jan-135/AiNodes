@@ -28,20 +28,11 @@ class Main:
     """
 
     def __init__(self):
-        self.app = QApplication([])  # Qt Anwendung
-
-        # 🎯 Erstelle Model, View und Controller unabhängig
-        self.node_editor = NodeEditor()  # Model (Daten & Logik)
-
-        self.graph_controller = GraphController(self.node_editor)  # Controller
-        self.main_window = MainWindow(self.graph_controller)# View (GUI)
-
-        # 🎯 Setze die Instanzen in MainWindow (damit View auf Controller zugreifen kann)
-        self.graph_controller.set_graph_view(self.main_window.scene)
+        self.app = QApplication([])
+        self.graph_controller = GraphController()
 
     def run(self):
-        """ Startet die Qt-App. """
-        self.main_window.show()
+        self.graph_controller.main_window.show()
         self.app.exec()
 
 def test_mvc():

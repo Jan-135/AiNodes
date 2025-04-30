@@ -77,3 +77,6 @@ class LinearRegressionNode(MlNode):
             "model": self.model,
             "predictions": predictions.tolist()
         }
+
+    def serialize_parameters(self)-> dict:
+        return {}

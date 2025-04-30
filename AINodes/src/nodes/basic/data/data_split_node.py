@@ -72,3 +72,8 @@ class DataSplitNode(BasicNode):
             "y_test": y_test.tolist(),
             "random_state": random_state  # Output the used seed
         }
+
+    def serialize_parameters(self) -> dict:
+        return {
+
+        }

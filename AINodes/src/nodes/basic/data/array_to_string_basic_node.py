@@ -26,6 +26,9 @@ class ArrayToStringBasicNode(BasicNode):
         # Define output socket for the string representation
         self.output_string = self.add_socket("output", "string", "string_output")
 
+        self.inputs.append(self.input_array)
+        self.outputs.append(self.output_string)
+
     def compute(self) -> Optional[Dict[str, str]]:
         """
         Converts the input array into a string using the specified separator.
@@ -40,3 +43,8 @@ class ArrayToStringBasicNode(BasicNode):
             return None  # Return None if no array data is provided
 
         return {"string_output": self.separator.join(map(str, array_data))}  # Convert array to string
+
+    def serialize_parameters(self) -> dict:
+        return {
+            "separator": self.separator
+        }

@@ -25,13 +25,15 @@ class Node(ABC):
         self.outputs: List[OutputSocket] = []  # List of output sockets
         self.inputs: List[InputSocket] = []  # List of input sockets
 
+
+
     def get_id(self) -> str:
         """
         Returns the unique identifier of the node.
 
         :return: The node's ID as a string.
         """
-        return self.node_type
+        return self.node_id
 
     def set_id(self, new_id):
         if self.node_id is None:
@@ -77,3 +79,42 @@ class Node(ABC):
         :param socket_key: A unique identifier for the socket in its node.
         """
         pass
+
+    @abstractmethod
+    def serialize_parameters(self) -> dict:
+        """
+        Abstract method that must be implemented by subclasses.
+        Returns the parameters of the node if available else returns None.
+
+        :return: The parameters of the node.
+
+        """
+
+        pass
+
+    def serialize_sockets(self):
+        """
+
+        Returns the input sockets of the node if available else returns None.
+        :return: The input sockets and its connections of the node as a dictionary.
+        """
+
+
+        """
+        Gibt ein Dictionary aller Input-Verbindungen zurück.
+        Key = eigener Input-Socket-Key
+        Value = { node_id, socket_key } des verbundenen Outputs
+        """
+        if not hasattr(self, "inputs") or not self.inputs:
+            return {}
+
+        connections = {}
+
+        for input_socket in self.inputs:
+            if input_socket.connected_socket:
+                connections[input_socket.socket_name] = {
+                    "connected_node": input_socket.connected_socket.parent_node.node_id,
+                    "connected_socket": input_socket.connected_socket.socket_name
+                }
+
+        return connections

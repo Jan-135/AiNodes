@@ -26,7 +26,7 @@ class GraphicSocket(QObject, QGraphicsEllipseItem):
 
         self.connections = []
 
-        self.update_position()
+        # self.update_position()
 
     def mousePressEvent(self, event: QGraphicsSceneMouseEvent):
         if event.button() == Qt.RightButton:
@@ -36,8 +36,8 @@ class GraphicSocket(QObject, QGraphicsEllipseItem):
 
 
 
-    def update_position(self):
-        """Aktualisiert die Position des ConnectionPoints relativ zur Node."""
-        if self.parent_node:
-            self.setPos(self.parent_node.pos().x() + self.relative_x,
-                        self.parent_node.pos().y() + self.relative_y)
+    # def update_position(self):
+    #     """Aktualisiert die Position des ConnectionPoints relativ zur Node."""
+    #     if self.parent_node:
+    #         self.setPos(self.parent_node.pos().x() + self.relative_x,
+    #                     self.parent_node.pos().y() + self.relative_y)

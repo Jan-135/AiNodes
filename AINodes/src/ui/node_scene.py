@@ -23,14 +23,12 @@ class NodeScene(QGraphicsScene):
         self.controller = controller
         self.nodes: List[GraphicNode] = []
         self.connections: List[Connection] = []
-        print(controller)
 
     def register_socket(self, socket: GraphicSocket) -> None:
         socket.socket_right_clicked.connect(self.handle_socket_right_clicked)
 
-    def add_node_view(self, node: Node):
-
-        newGraphicNode = GraphicNode(node)
+    def add_node_view(self, node: Node, x: float = 0 , y: float = 0) -> None:
+        newGraphicNode = GraphicNode(node, x = x, y = y)
         self.nodes.append(newGraphicNode)
         self.addItem(newGraphicNode)
         for socket in newGraphicNode.sockets:

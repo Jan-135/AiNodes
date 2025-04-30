@@ -27,3 +27,8 @@ class SingleStringInputNode(InputNode):
         :return: The predefined string value.
         """
         return self.value
+
+    def serialize_parameters(self) -> dict:
+        return {
+            "value": self.value,
+        }

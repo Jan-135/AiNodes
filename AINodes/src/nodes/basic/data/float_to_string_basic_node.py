@@ -39,3 +39,8 @@ class FloatToStringBasicNode(BasicNode):
             return None  # Return None if no value is provided
 
         return {"string_output": f"{value:.{self.precision}f}"}  # Format float with specified precision
+
+    def serialize_parameters(self) -> dict:
+        return {
+            "precision": self.precision,
+        }

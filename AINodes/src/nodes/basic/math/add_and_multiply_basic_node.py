@@ -45,3 +45,8 @@ class AddAndMultiplyBasicNode(BasicNode):
             "sum": val1 + val2,
             "product": val1 * val2
         }
+
+    def serialize_parameters(self) -> dict:
+        return {
+
+        }

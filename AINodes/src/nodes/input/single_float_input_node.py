@@ -19,6 +19,7 @@ class SingleFloatInputNode(InputNode):
         # Output socket for the float value
         self.output = self.add_socket("output", "float", "out")
 
+
     def compute(self) -> float:
         """
         Returns the stored float value.
@@ -27,3 +28,6 @@ class SingleFloatInputNode(InputNode):
         """
 
         return self.value
+
+    def serialize_parameters(self) -> dict:
+        return {"value": self.value}

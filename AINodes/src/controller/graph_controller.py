@@ -1,9 +1,12 @@
 import json
+from typing import Dict
 
 from PySide6.QtCore import QObject
 
+from AINodes.src.core.node import Node
 from AINodes.src.core.node_editor import NodeEditor
 from AINodes.src.sockets.input_socket import InputSocket
+from AINodes.src.ui.main_window import MainWindow
 from AINodes.src.ui.node_scene import NodeScene
 
 
@@ -14,20 +17,20 @@ class GraphController(QObject):
     - Behandelt Benutzerinteraktionen (z. B. Hinzufügen/Verbinden von Nodes).
     """
 
-    def __init__(self, node_editor: NodeEditor = None, graph_scene: NodeScene = None):
+    def __init__(self):
         """
         Initialisiert den GraphController.
 
         :param graph_scene: Die grafische Oberfläche für den Node-Graphen.
         :param node_editor: Das Model für den Node-Editor.
         """
-        super().__init__()
-        self.graph_scene = graph_scene
-        self.node_editor = node_editor
+        self.node_editor = NodeEditor(self)  # Übergibt sich selbst!
+        self.main_window = MainWindow(self)
+        self.graph_scene = self.main_window.scene
 
         self.start_socket = None
 
-    def add_node(self, node_type: str):
+    def create_node(self, node_type: str):
         """
         Erstellt einen neuen Node und fügt ihn sowohl im Model als auch in der View hinzu.
 
@@ -38,6 +41,7 @@ class GraphController(QObject):
         node = self.node_editor.add_new_node(node_type)
         if node:
             self.graph_scene.add_node_view(node)  # In der View anzeigen
+
 
     def delete_node(self, node_id: str) -> None:
         """
@@ -57,6 +61,7 @@ class GraphController(QObject):
         :param output_socket_id: Die ID des Output-Sockets.
         :param input_socket_id: Die ID des Input-Sockets.
         """
+        print("Lets try in controller")
 
         try:
             self.node_editor.connect_sockets_by_id(output_socket_id, input_socket_id)
@@ -106,3 +111,25 @@ class GraphController(QObject):
             if node.node_id == id:
                 position =  node.pos()
                 return position.x(), position.y()
+
+
+    def save(self, filepath: str):
+        self.node_editor.save_graph_to_file(filepath)
+
+    def get_position(self, node_id):
+        for node in self.graph_scene.nodes:
+            print(f"Node id: {node.node_id}, position: {node.pos()}")
+            print(f"Searching for: {node_id}")
+            if node.node_id == node_id:
+                return {"x": node.pos().x(), "y": node.pos().y()}
+
+        raise Exception(f"Node {node_id} not found.")
+
+    def load_graph(self, filepath: str):
+        self.node_editor.load_graph_from_file(filepath)
+        #self.graph_scene.load_graph()
+
+    def add_node(self, node: Node, x: float = 0, y: float = 0) -> None:
+        self.node_editor.nodes.append(node)
+        if node:
+            self.graph_scene.add_node_view(node, x, y)
