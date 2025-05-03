@@ -43,14 +43,16 @@ class GraphController(QObject):
             self.graph_scene.add_node_view(node)  # In der View anzeigen
 
 
-    def delete_node(self, node_id: str) -> None:
+    def delete_node_by_id(self, node_id: str) -> None:
         """
         Entfernt einen Node aus dem Model und der View.
 
         :param node_id: Die ID des zu entfernenden Nodes.
         """
+
         node = self.node_editor.get_node_by_id(node_id)
         if node:
+            print("Trying to delete node by id:", node_id)
             self.node_editor.remove_node(node)
             self.graph_scene.remove_node_view(node_id)
 

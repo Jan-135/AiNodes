@@ -59,3 +59,16 @@ class InputSocket(Socket):
 
             return new_value
         return None
+
+    def remove_connection(self):
+        """
+        Trennt diese Verbindung im Backend.
+        Falls es eine Gegenverbindung gibt, wird sie auch aufgelöst.
+        """
+        if self.connected_socket:
+            other = self.connected_socket
+            self.connected_socket = None
+
+            if hasattr(other, "connected_socket") and other.connected_socket == self:
+                other.connected_socket = None
+

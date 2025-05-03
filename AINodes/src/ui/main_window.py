@@ -5,6 +5,7 @@ from PySide6.QtWidgets import QMainWindow, QToolBar, QMenu, QPushButton, QFileDi
 
 
 from AINodes.src.ui.graph_view import GraphView
+from AINodes.src.ui.graphic_node import GraphicNode
 from AINodes.src.ui.node_scene import NodeScene
 
 
@@ -93,9 +94,18 @@ class MainWindow(QMainWindow):
         """
         if event.key() == Qt.Key_Escape:
             self.close()
+        elif event.key() in (Qt.Key_Delete, Qt.Key_Backspace):
+            self.delete_selected_nodes()
 
     def set_controller(self, graph_controller):
         self.controller = graph_controller
         self.scene.controller = graph_controller
 
 
+    def delete_selected_nodes(self):
+        selected_items = self.scene.selectedItems()
+
+        for item in selected_items:
+            if isinstance(item, GraphicNode):
+                node_id = item.node_id
+                self.controller.delete_node_by_id(node_id)

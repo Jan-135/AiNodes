@@ -36,7 +36,12 @@ class NodeScene(QGraphicsScene):
 
     def remove_node_view(self, node_id: str):
         """Entfernt eine Node anhand seiner ID."""
-        self.nodes = [node for node in self.nodes if node.node_id != node_id]
+        for item in self.nodes:
+            if isinstance(item, GraphicNode) and item.node_id == node_id:
+                for socket in item.sockets:
+                    for conn in getattr(socket, 'connections', []):
+                        conn.delete_connection()
+                self.removeItem(item)
 
     def add_connection_view(self, output_socket_id: str, input_socket_id: str) -> None:
         output_socket = self.find_socket_by_id(output_socket_id)

@@ -1,6 +1,6 @@
 from PySide6.QtCore import Qt, QRectF, QPointF
 from PySide6.QtGui import QBrush, QColor, QPen, QPainterPath, QTextOption
-from PySide6.QtWidgets import QGraphicsItem, QGraphicsEllipseItem, QGraphicsTextItem
+from PySide6.QtWidgets import QGraphicsItem, QGraphicsEllipseItem, QGraphicsTextItem, QGraphicsDropShadowEffect
 
 from AINodes.src.core.node import Node
 from AINodes.src.ui.graphic_socket import GraphicSocket
@@ -10,7 +10,6 @@ class GraphicNode(QGraphicsItem):
     def __init__(self, parent: Node = None, x=0, y=0):
         super().__init__()
         self.setPos(x, y)
-
 
         self.setFlag(QGraphicsItem.ItemIsMovable)
         self.setFlag(QGraphicsItem.ItemIsSelectable)
@@ -40,7 +39,7 @@ class GraphicNode(QGraphicsItem):
             socket_y = -self.total_height / 2 + self.title_height + (i * 30) + 15
             socket_id = parent.inputs[i].socket_id
 
-            socket = GraphicSocket(socket_id, socket_x := -self.width / 2 -5, socket_y, self)
+            socket = GraphicSocket(socket_id, socket_x := -self.width / 2 - 5, socket_y, self)
             socket.setBrush(QBrush(QColor(48, 48, 48)))
             socket.setPen(QPen(QBrush(QColor(126, 126, 126)), 1))
 
@@ -56,7 +55,7 @@ class GraphicNode(QGraphicsItem):
             socket_y = -self.total_height / 2 + self.title_height + (i * 30) + 15 + (self.num_inputs * 30)
             socket_id = parent.outputs[i].socket_id
 
-            socket = GraphicSocket(socket_id, socket_x := self.width / 2 -5, socket_y, self)
+            socket = GraphicSocket(socket_id, socket_x := self.width / 2 - 5, socket_y, self)
             socket.setBrush(QBrush(QColor(48, 48, 48)))
             socket.setPen(QPen(QBrush(QColor(126, 126, 126)), 1))
 
@@ -72,6 +71,14 @@ class GraphicNode(QGraphicsItem):
 
         # for socket in self.sockets:
         #     socket.update_position()
+
+
+        shadow = QGraphicsDropShadowEffect()
+        shadow.setBlurRadius(15)
+        shadow.setOffset(3, 3)
+        shadow.setColor(QColor(0, 0, 0, 180))  # leicht transparenter Schwarzton
+
+        self.setGraphicsEffect(shadow)
 
     def boundingRect(self):
         return self.rect
@@ -92,6 +99,13 @@ class GraphicNode(QGraphicsItem):
         # Titeltext zeichnen
         painter.setPen(QColor(255, 255, 255))  # Weiße Schrift
         painter.drawText(self.title_rect, Qt.AlignCenter, self.node_type)
+
+        if self.isSelected():
+            pen = QPen(QColor(255, 255, 255), 1.5)
+            painter.setPen(pen)
+            painter.setBrush(Qt.NoBrush)
+            selection_rect = self.boundingRect()
+            painter.drawRect(selection_rect)
 
     def itemChange(self, change, value):
         if change == QGraphicsItem.ItemPositionChange:

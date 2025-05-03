@@ -105,14 +105,21 @@ class NodeEditor:
         self.nodes.append(node)
 
     def remove_node(self, node: "Node") -> None:
-        """
-        Removes a node from the editor.
+        if node not in self.nodes:
+            return
 
-        :param node: The node instance to be removed.
-        """
+        # 1. Alle Eingänge des Nodes trennen
+        for input_socket in node.inputs:
+            input_socket.remove_connection()
 
-        if node in self.nodes:
-            self.nodes.remove(node)
+        # 2. Alle anderen Nodes durchgehen und prüfen, ob ihre Inputs zu diesem Node zeigen
+        for other_node in self.nodes:
+            for input_socket in other_node.inputs:
+                if input_socket.connected_socket and input_socket.connected_socket.parent_node == node:
+                    input_socket.remove_connection()
+
+        # 3. Node aus Liste entfernen
+        self.nodes.remove(node)
 
     def clear_all_caches(self) -> None:
         """

@@ -30,7 +30,16 @@ class Connection(QGraphicsLineItem):
 
     def delete_connection(self):
         scene = self.scene()
-        scene.removeItem(self)
+        if scene:
+            scene.removeItem(self)
+
+
+        if hasattr(self.start_socket, "connections"):
+            if self in self.start_socket.connections:
+                self.start_socket.connections.remove(self)
+        if self.end_socket and hasattr(self.end_socket, "connections"):
+            if self in self.end_socket.connections:
+                self.end_socket.connections.remove(self)
 
     @classmethod
     def create(cls, start_socket, end_socket, scene):
