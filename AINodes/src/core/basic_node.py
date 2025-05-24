@@ -23,6 +23,11 @@ class BasicNode(Node, ABC):
         super().__init__(node_type)
 
 
+
+    @property
+    def display_name(self) -> str:
+        return self.__display_name
+
     def add_socket(self, socket_type: str, data_type: str, socket_key: str) -> Socket:
         """
         Creates and adds a new input or output socket to the node.

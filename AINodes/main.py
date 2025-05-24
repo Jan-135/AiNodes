@@ -15,6 +15,7 @@ sys.path.append(os.path.abspath(os.path.dirname(__file__)))  # Add current direc
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "src")))  # Add "src" folder to path
 
 from PySide6.QtWidgets import QApplication
+from PySide6.QtCore import Qt
 from AINodes.src.ui.main_window import MainWindow
 from AINodes.src.core.node_editor import NodeEditor
 from AINodes.src.controller.graph_controller import GraphController
@@ -28,7 +29,10 @@ class Main:
     """
 
     def __init__(self):
+        # QApplication.setAttribute(Qt.ApplicationAttribute.AA_EnableHighDpiScaling)
+        # QApplication.setAttribute(Qt.ApplicationAttribute.AA_UseHighDpiPixmaps)
         self.app = QApplication([])
+
         self.graph_controller = GraphController()
 
     def run(self):

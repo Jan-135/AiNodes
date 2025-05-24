@@ -3,7 +3,7 @@ from __future__ import annotations  # Enables forward type declarations
 from typing import List
 from typing import TYPE_CHECKING
 
-from PySide6.QtGui import QColor, QBrush
+from PySide6.QtGui import QColor, QBrush, QPainter
 from PySide6.QtWidgets import QGraphicsScene
 
 from AINodes.src.core.node import Node

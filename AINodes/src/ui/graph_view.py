@@ -6,10 +6,12 @@ from PySide6.QtWidgets import QGraphicsView
 class GraphView(QGraphicsView):
     def __init__(self, scene, parent=None):
         super().__init__(scene, parent)
-        self.setRenderHint(QPainter.Antialiasing)
-        self.setDragMode(QGraphicsView.RubberBandDrag)
+        self.setRenderHint(QPainter.RenderHint.Antialiasing)
+        self.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+
+        self.setDragMode(QGraphicsView.DragMode.RubberBandDrag)
         self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
-        self.setViewportUpdateMode(QGraphicsView.FullViewportUpdate)
+        self.setViewportUpdateMode(QGraphicsView.ViewportUpdateMode.FullViewportUpdate)
 
         self.is_panning = False
         self.last_mouse_pos = None
@@ -19,10 +21,10 @@ class GraphView(QGraphicsView):
         self.scale(scale_factor, scale_factor)
 
     def mousePressEvent(self, event):
-        if event.button() == Qt.MiddleButton:
+        if event.button() == Qt.MouseButton.MiddleButton:
             self.is_panning = True
             self.last_mouse_pos = event.pos()
-            self.setCursor(Qt.ClosedHandCursor)
+            self.setCursor(Qt.CursorShape.ClosedHandCursor)
         else:
             super().mousePressEvent(event)
 
@@ -36,8 +38,8 @@ class GraphView(QGraphicsView):
             super().mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event):
-        if event.button() == Qt.MiddleButton:
+        if event.button() == Qt.MouseButton.MiddleButton:
             self.is_panning = False
-            self.setCursor(Qt.ArrowCursor)
+            self.setCursor(Qt.CursorShape.ArrowCursor)
         else:
             super().mouseReleaseEvent(event)

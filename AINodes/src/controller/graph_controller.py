@@ -8,6 +8,8 @@ from AINodes.src.core.node_editor import NodeEditor
 from AINodes.src.sockets.input_socket import InputSocket
 from AINodes.src.ui.main_window import MainWindow
 from AINodes.src.ui.node_scene import NodeScene
+from AINodes.src.utils.logger import logger
+
 
 
 class GraphController(QObject):
@@ -26,9 +28,17 @@ class GraphController(QObject):
         """
         self.node_editor = NodeEditor(self)  # Übergibt sich selbst!
         self.main_window = MainWindow(self)
+
+        handler = UILogHandler(self)
+        handler.setFormatter(logging.Formatter('[%(levelname)s] %(message)s'))
+        logger.addHandler(handler)
+
         self.graph_scene = self.main_window.scene
 
         self.start_socket = None
+
+    def forward_log_to_ui(self, message: str) -> None:
+        self.main_window.log(message)
 
     def create_node(self, node_type: str):
         """
@@ -135,3 +145,14 @@ class GraphController(QObject):
         self.node_editor.nodes.append(node)
         if node:
             self.graph_scene.add_node_view(node, x, y)
+
+import logging
+
+class UILogHandler(logging.Handler):
+    def __init__(self, controller):
+        super().__init__()
+        self.controller = controller
+
+    def emit(self, record):
+        msg = self.format(record)
+        self.controller.forward_log_to_ui(msg)

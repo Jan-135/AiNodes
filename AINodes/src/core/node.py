@@ -3,7 +3,7 @@ from typing import Any, Optional, List
 
 from AINodes.src.sockets.input_socket import InputSocket
 from AINodes.src.sockets.output_socket import OutputSocket
-
+from AINodes.src.utils.logger import logger
 
 class Node(ABC):
     """

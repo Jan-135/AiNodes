@@ -2,8 +2,9 @@ import os
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QMainWindow, QToolBar, QMenu, QPushButton, QFileDialog
+from PySide6.QtWidgets import QDockWidget
 
-
+from AINodes.src.ui.log_console import LogConsole
 from AINodes.src.ui.graph_view import GraphView
 from AINodes.src.ui.graphic_node import GraphicNode
 from AINodes.src.ui.node_scene import NodeScene
@@ -18,6 +19,11 @@ class MainWindow(QMainWindow):
 
     def __init__(self, controller):
         super().__init__()
+
+        self.log_console = LogConsole()
+        self.log_dock = QDockWidget("Log", self)
+        self.log_dock.setWidget(self.log_console)
+        self.addDockWidget(Qt.BottomDockWidgetArea, self.log_dock)
 
         self.setWindowTitle("Node-based AI Editor")
         self.setGeometry(100, 100, 800, 600)
@@ -52,6 +58,9 @@ class MainWindow(QMainWindow):
         self.load_button = QPushButton("Load")
         self.toolbar.addWidget(self.load_button)
         self.load_button.clicked.connect(self.on_load_button_clicked)
+
+    def log(self, message: str):
+        self.log_console.log(message)
 
     def on_load_button_clicked(self):
         filepath, _ = QFileDialog.getOpenFileName(self, "Open File", os.path.expanduser("~"),)
