@@ -40,7 +40,7 @@ class GraphController(QObject):
     def forward_log_to_ui(self, message: str) -> None:
         self.main_window.log(message)
 
-    def create_node(self, node_type: str):
+    def create_node(self, node_type: str, x: float = None, y: float = None) -> None:
         """
         Erstellt einen neuen Node und fügt ihn sowohl im Model als auch in der View hinzu.
 
@@ -50,8 +50,10 @@ class GraphController(QObject):
         # Neues Node-Objekt im Model erstellen
         node = self.node_editor.add_new_node(node_type)
         if node:
-            self.graph_scene.add_node_view(node)  # In der View anzeigen
-
+            if x is None or y is None:
+                self.graph_scene.add_node_view(node)  # In der View anzeigen
+            else:
+                self.graph_scene.add_node_view(node, x, y)
 
     def delete_node_by_id(self, node_id: str) -> None:
         """
