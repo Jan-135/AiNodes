@@ -11,7 +11,6 @@ from AINodes.src.ui.node_scene import NodeScene
 from AINodes.src.utils.logger import logger
 
 
-
 class GraphController(QObject):
     """
     Zentrale Controller-Klasse für das Node-Editor-System.
@@ -26,7 +25,7 @@ class GraphController(QObject):
         :param graph_scene: Die grafische Oberfläche für den Node-Graphen.
         :param node_editor: Das Model für den Node-Editor.
         """
-        self.node_editor = NodeEditor(self)  # Übergibt sich selbst!
+        self.node_editor = NodeEditor(self)
         self.main_window = MainWindow(self)
 
         handler = UILogHandler(self)
@@ -47,11 +46,10 @@ class GraphController(QObject):
         :param node_type: Der Typ des zu erstellenden Nodes.
         :param position: Die Position, an der der Node eingefügt werden soll.
         """
-        # Neues Node-Objekt im Model erstellen
         node = self.node_editor.add_new_node(node_type)
         if node:
             if x is None or y is None:
-                self.graph_scene.add_node_view(node)  # In der View anzeigen
+                self.graph_scene.add_node_view(node)
             else:
                 self.graph_scene.add_node_view(node, x, y)
 
@@ -96,8 +94,8 @@ class GraphController(QObject):
         input_socket = self.node_editor.get_socket_by_id(input_socket_id)
 
         if isinstance(input_socket, InputSocket) and input_socket.connected_socket:
-            input_socket.connected_socket = None  # Verbindung im Model löschen
-            self.graph_scene.remove_connection_view(output_socket_id, input_socket_id)  # View aktualisieren
+            input_socket.connected_socket = None
+            self.graph_scene.remove_connection_view(output_socket_id, input_socket_id)
 
     def get_available_nodes(self):
 
@@ -123,9 +121,8 @@ class GraphController(QObject):
         nodes = self.graph_scene.nodes
         for node in nodes:
             if node.node_id == id:
-                position =  node.pos()
+                position = node.pos()
                 return position.x(), position.y()
-
 
     def save(self, filepath: str):
         self.node_editor.save_graph_to_file(filepath)
@@ -141,14 +138,15 @@ class GraphController(QObject):
 
     def load_graph(self, filepath: str):
         self.node_editor.load_graph_from_file(filepath)
-        #self.graph_scene.load_graph()
 
     def add_node(self, node: Node, x: float = 0, y: float = 0) -> None:
         self.node_editor.nodes.append(node)
         if node:
             self.graph_scene.add_node_view(node, x, y)
 
+
 import logging
+
 
 class UILogHandler(logging.Handler):
     def __init__(self, controller):

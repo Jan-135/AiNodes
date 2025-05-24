@@ -1,4 +1,4 @@
-from __future__ import annotations  # Enables forward type declarations
+from __future__ import annotations
 
 from typing import List
 from typing import TYPE_CHECKING
@@ -18,7 +18,8 @@ if TYPE_CHECKING:
 class NodeScene(QGraphicsScene):
     def __init__(self, controller: GraphController = None, parent=None):
         super().__init__(parent)
-        self.setSceneRect(-500, -500, 1000, 1000)  # Setzt den sichtbaren Bereich
+        large_dim = 100000
+        self.setSceneRect(-large_dim / 2, -large_dim / 2, large_dim, large_dim)
         self.setBackgroundBrush(QBrush(QColor(29, 29, 29)))
         self.controller = controller
         self.nodes: List[GraphicNode] = []
@@ -27,8 +28,8 @@ class NodeScene(QGraphicsScene):
     def register_socket(self, socket: GraphicSocket) -> None:
         socket.socket_right_clicked.connect(self.handle_socket_right_clicked)
 
-    def add_node_view(self, node: Node, x: float = 0 , y: float = 0) -> None:
-        newGraphicNode = GraphicNode(node, x = x, y = y)
+    def add_node_view(self, node: Node, x: float = 0, y: float = 0) -> None:
+        newGraphicNode = GraphicNode(node, x=x, y=y)
         self.nodes.append(newGraphicNode)
         self.addItem(newGraphicNode)
         for socket in newGraphicNode.sockets:

@@ -28,8 +28,6 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Node-based AI Editor")
         self.setGeometry(100, 100, 800, 600)
 
-
-
         # Initialisiere Node Scene & View
         self.scene = NodeScene(controller)
         self.view = GraphView(self.scene)
@@ -63,9 +61,8 @@ class MainWindow(QMainWindow):
         self.log_console.log(message)
 
     def on_load_button_clicked(self):
-        filepath, _ = QFileDialog.getOpenFileName(self, "Open File", os.path.expanduser("~"),)
+        filepath, _ = QFileDialog.getOpenFileName(self, "Open File", os.path.expanduser("~"), )
         self.controller.load_graph(filepath)
-
 
     def on_run_button_clicked(self):
         self.controller.run()
@@ -95,8 +92,6 @@ class MainWindow(QMainWindow):
 
         return menu
 
-
-
     def keyPressEvent(self, event):
         """
         Beendet die Anwendung bei Escape.
@@ -109,7 +104,6 @@ class MainWindow(QMainWindow):
     def set_controller(self, graph_controller):
         self.controller = graph_controller
         self.scene.controller = graph_controller
-
 
     def delete_selected_nodes(self):
         selected_items = self.scene.selectedItems()
